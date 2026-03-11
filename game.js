@@ -215,14 +215,30 @@ function renderCounts() {
   elPlayerCount.textContent = player.cardCount;
   elAiCount.textContent     = ai.cardCount;
 
-  // Show/hide deck visuals
-  elPlayerDeck.style.visibility = player.hasCards() ? 'visible' : 'hidden';
-  elAiDeck.style.visibility     = ai.hasCards()     ? 'visible' : 'hidden';
+  updateStack(elPlayerDeck, player.cardCount);
+  updateStack(elAiDeck,     ai.cardCount);
 
   // Health bars — percentage of the 52-card total each player holds
   const total = player.cardCount + ai.cardCount + pile.length || 52;
   setBar(elPlayerBar, player.cardCount / 52);
   setBar(elCpuBar,    ai.cardCount    / 52);
+}
+
+function updateStack(containerEl, count) {
+  const card = containerEl.querySelector('.stack-card');
+  if (count === 0) {
+    card.classList.add('empty');
+    return;
+  }
+  card.classList.remove('empty');
+  // Scale 1–52 onto 1–12 visual layers
+  const layers = Math.max(1, Math.round((count / 52) * 12));
+  const shadows = [];
+  for (let i = 1; i <= layers; i++) {
+    const offset = i * 2;
+    shadows.push(`${offset}px ${offset}px 0 #6a1b9a`);
+  }
+  card.style.boxShadow = shadows.join(', ');
 }
 
 function setBar(el, ratio) {

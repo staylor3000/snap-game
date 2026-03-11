@@ -6,7 +6,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(160deg, #e040a0 0%, #9c27b0 60%, #7b1fa2 100%);
+  background: #ffffff;
   font-family: 'Georgia', serif;
   color: #3b1f4e;
   overflow: hidden;
@@ -137,7 +137,7 @@ body {
   font-size: 0.7rem;
   font-weight: bold;
   letter-spacing: 0.06em;
-  color: rgba(255,255,255,0.75);
+  color: #9c27b0;
   text-transform: uppercase;
 }
 
@@ -145,12 +145,13 @@ body {
   font-size: 1.1rem;
   font-weight: bold;
   color: #fff;
-  background: rgba(255,255,255,0.2);
+  background: linear-gradient(135deg, #e91e8c, #9c27b0);
   border-radius: 20px;
   min-width: 28px;
   text-align: center;
   padding: 1px 8px;
   transition: transform 0.15s;
+  box-shadow: 0 2px 8px rgba(156, 39, 176, 0.3);
 }
 
 @keyframes counter-pop {
@@ -195,17 +196,14 @@ body {
   color: #4a148c;
 }
 
-/* Face-down deck stack */
-.deck-visual {
-  position: relative;
-  width: 62px;
-  height: 88px;
+/* Card stack visualisation */
+.card-stack {
+  /* Padding lets the box-shadow stack be visible without clipping */
+  padding: 0 22px 22px 0;
+  flex-shrink: 0;
 }
-.deck-visual::before,
-.deck-visual::after,
-.deck-visual span {
-  content: '';
-  position: absolute;
+
+.stack-card {
   width: 62px;
   height: 88px;
   border-radius: 6px;
@@ -214,12 +212,15 @@ body {
     #9c27b0 0px 6px,
     #7b1fa2 6px 12px
   );
-  border: 1px solid rgba(255,255,255,0.3);
-  box-shadow: 1px 1px 4px rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,255,255,0.35);
+  position: relative;
+  transition: box-shadow 0.35s ease, opacity 0.3s ease;
 }
-.deck-visual::before { transform: translate(3px, -3px); }
-.deck-visual::after  { transform: translate(1px, -1px); }
-.deck-visual span    { transform: translate(0, 0); display: block; }
+
+.stack-card.empty {
+  opacity: 0.2;
+  box-shadow: none !important;
+}
 
 /* ── Pile area ────────────────────────────────────────────────────────────── */
 #pile-area {
