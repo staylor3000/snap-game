@@ -9,16 +9,38 @@
 <body>
 
 <div id="app">
-  <h1>SNAP!</h1>
+
+  <!-- ── Health bar HUD ── -->
+  <div id="hud">
+    <div class="hud-player" id="hud-cpu">
+      <span class="hud-name">CPU</span>
+      <div class="health-track cpu-track">
+        <div class="health-fill" id="cpu-bar"></div>
+      </div>
+      <span class="hud-cards" id="ai-count">26</span>
+    </div>
+
+    <div id="hud-center">
+      <div id="snap-streak" class="hidden">
+        <span id="streak-fire">🔥</span><span id="streak-count">0</span>
+      </div>
+      <div id="hud-vs">VS</div>
+    </div>
+
+    <div class="hud-player" id="hud-you">
+      <span class="hud-cards" id="player-count">26</span>
+      <div class="health-track you-track">
+        <div class="health-fill" id="player-bar"></div>
+      </div>
+      <span class="hud-name">YOU</span>
+    </div>
+  </div>
 
   <div id="table">
 
     <!-- CPU row -->
     <div class="player-row">
-      <div class="player-label">
-        <strong>CPU</strong>
-        <span id="ai-count">26 cards</span>
-      </div>
+      <div class="player-label"><strong>CPU</strong></div>
       <div class="deck-visual" id="ai-deck-visual"><span></span></div>
     </div>
 
@@ -37,10 +59,7 @@
 
     <!-- Player row -->
     <div class="player-row">
-      <div class="player-label">
-        <strong>You</strong>
-        <span id="player-count">26 cards</span>
-      </div>
+      <div class="player-label"><strong>You</strong></div>
       <div class="deck-visual" id="player-deck-visual"><span></span></div>
     </div>
 

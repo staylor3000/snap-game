@@ -22,13 +22,102 @@ body {
   padding: 16px;
 }
 
-h1 {
-  font-size: 2.4rem;
-  letter-spacing: 0.12em;
-  color: #ffd700;
-  text-shadow: 0 2px 8px rgba(0,0,0,0.6);
-  margin-bottom: 4px;
+/* ── HUD health bar ───────────────────────────────────────────────────────── */
+#hud {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0 6px;
 }
+
+.hud-player {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+#hud-cpu  { flex-direction: row; }
+#hud-you  { flex-direction: row-reverse; }
+
+.hud-name {
+  font-size: 0.7rem;
+  font-weight: bold;
+  letter-spacing: 0.08em;
+  color: #c8e6c9;
+  white-space: nowrap;
+  min-width: 26px;
+}
+
+.hud-cards {
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: #fff;
+  min-width: 18px;
+  text-align: center;
+}
+
+.health-track {
+  flex: 1;
+  height: 18px;
+  background: rgba(0,0,0,0.55);
+  border-radius: 3px;
+  border: 1px solid rgba(255,255,255,0.15);
+  overflow: hidden;
+  box-shadow: inset 0 1px 4px rgba(0,0,0,0.5);
+}
+
+/* CPU bar grows left-to-right from the left edge */
+.cpu-track { direction: ltr; }
+/* Player bar grows right-to-left (mirror) */
+.you-track { direction: rtl; }
+
+.health-fill {
+  height: 100%;
+  width: 50%;
+  background: linear-gradient(90deg, #43a047, #66bb6a);
+  border-radius: 3px;
+  transition: width 0.4s ease, background 0.4s ease;
+}
+
+/* ── HUD centre (VS + streak) ─────────────────────────────────────────────── */
+#hud-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 48px;
+}
+
+#hud-vs {
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: #ffd700;
+  letter-spacing: 0.1em;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+}
+
+#snap-streak {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: #fff;
+  background: rgba(229,57,53,0.85);
+  border-radius: 10px;
+  padding: 1px 7px;
+  white-space: nowrap;
+}
+#snap-streak.hidden { display: none; }
+
+@keyframes streak-pop {
+  0%   { transform: scale(0.7); }
+  60%  { transform: scale(1.25); }
+  100% { transform: scale(1); }
+}
+.streak-pop { animation: streak-pop 0.2s ease-out forwards; }
 
 /* ── Table surface ────────────────────────────────────────────────────────── */
 #table {
