@@ -1,0 +1,264 @@
+/* ── Reset & base ─────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #1a1a2e;
+  font-family: 'Georgia', serif;
+  color: #f0e6d3;
+  overflow: hidden;
+}
+
+/* ── App shell ────────────────────────────────────────────────────────────── */
+#app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  width: min(480px, 100vw);
+  padding: 16px;
+}
+
+h1 {
+  font-size: 2.4rem;
+  letter-spacing: 0.12em;
+  color: #ffd700;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+  margin-bottom: 4px;
+}
+
+/* ── Table surface ────────────────────────────────────────────────────────── */
+#table {
+  width: 100%;
+  background: radial-gradient(ellipse at center, #2e7d32 0%, #1b5e20 100%);
+  border: 10px solid #4e342e;
+  border-radius: 24px;
+  box-shadow: 0 0 0 4px #3e2723, inset 0 0 50px rgba(0,0,0,0.4);
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+/* ── Player rows ──────────────────────────────────────────────────────────── */
+.player-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.player-label {
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  color: #c8e6c9;
+  white-space: nowrap;
+}
+.player-label strong {
+  display: block;
+  font-size: 1rem;
+  color: #ffffff;
+}
+
+/* Face-down deck stack */
+.deck-visual {
+  position: relative;
+  width: 62px;
+  height: 88px;
+}
+.deck-visual::before,
+.deck-visual::after,
+.deck-visual span {
+  content: '';
+  position: absolute;
+  width: 62px;
+  height: 88px;
+  border-radius: 6px;
+  background: repeating-linear-gradient(
+    -45deg,
+    #1565c0 0px 6px,
+    #0d47a1 6px 12px
+  );
+  border: 1px solid rgba(255,255,255,0.2);
+  box-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+}
+.deck-visual::before { transform: translate(3px, -3px); }
+.deck-visual::after  { transform: translate(1px, -1px); }
+.deck-visual span    { transform: translate(0, 0); display: block; }
+
+/* ── Pile area ────────────────────────────────────────────────────────────── */
+#pile-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+#pile-slot {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  min-height: 110px;
+}
+
+#pile-count {
+  font-size: 0.8rem;
+  color: #a5d6a7;
+  letter-spacing: 0.05em;
+}
+
+/* ── Cards ────────────────────────────────────────────────────────────────── */
+.card {
+  width: 72px;
+  height: 100px;
+  border-radius: 7px;
+  border: 1px solid #bbb;
+  background: #fff;
+  box-shadow: 2px 4px 12px rgba(0,0,0,0.45);
+  position: relative;
+  flex-shrink: 0;
+}
+
+.card.empty {
+  background: rgba(255,255,255,0.08);
+  border: 2px dashed rgba(255,255,255,0.2);
+  box-shadow: none;
+}
+
+.card.red   { color: #c62828; }
+.card.black { color: #1a1a1a; }
+
+.corner {
+  position: absolute;
+  font-size: 12px;
+  line-height: 1.2;
+  font-weight: bold;
+  text-align: center;
+}
+.top-left     { top: 5px; left: 6px; }
+.bottom-right {
+  bottom: 5px; right: 6px;
+  transform: rotate(180deg);
+}
+
+.center-suit {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 32px;
+  line-height: 1;
+}
+
+/* Card flip-in animation */
+@keyframes flip-in {
+  0%   { transform: scaleY(0.05) translateY(-20px); opacity: 0.3; }
+  65%  { transform: scaleY(1.06); }
+  100% { transform: scaleY(1) translateY(0); opacity: 1; }
+}
+.card.flip-in { animation: flip-in 0.2s ease-out forwards; }
+
+/* ── Controls ─────────────────────────────────────────────────────────────── */
+#controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding-top: 8px;
+}
+
+#status-msg {
+  font-size: 0.9rem;
+  color: #ffe082;
+  text-align: center;
+  min-height: 1.4em;
+  letter-spacing: 0.03em;
+}
+
+.action-btn {
+  padding: 12px 32px;
+  border: none;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: bold;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.1s, opacity 0.15s;
+}
+.action-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,0.35); }
+.action-btn:active:not(:disabled) { transform: translateY(0); }
+.action-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+#btn-flip {
+  background: linear-gradient(135deg, #1565c0, #0d47a1);
+  color: #fff;
+  width: 180px;
+}
+
+#btn-snap {
+  background: linear-gradient(135deg, #e53935, #b71c1c);
+  color: #fff;
+  font-size: 1.3rem;
+  width: 200px;
+  box-shadow: 0 0 20px rgba(229, 57, 53, 0.6);
+}
+@keyframes snap-pulse {
+  0%   { transform: scale(0.4); opacity: 0; }
+  70%  { transform: scale(1.12); }
+  100% { transform: scale(1);   opacity: 1; }
+}
+#btn-snap:not([hidden]) { animation: snap-pulse 0.22s ease-out forwards; }
+
+/* ── Game-over overlay ────────────────────────────────────────────────────── */
+#overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+#overlay[hidden] { display: none; }
+
+#overlay-content {
+  background: #1e2a3a;
+  border: 2px solid #ffd700;
+  border-radius: 16px;
+  padding: 32px 40px;
+  text-align: center;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+#overlay-title { font-size: 2rem; color: #ffd700; }
+#overlay-body  { font-size: 0.95rem; color: #c8e6c9; line-height: 1.6; }
+
+#btn-play-again {
+  background: linear-gradient(135deg, #ffd700, #f9a825);
+  color: #1a1a1a;
+  padding: 12px 36px;
+  border: none;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.1s;
+  margin-top: 4px;
+}
+#btn-play-again:hover { transform: scale(1.04); }
+
+/* ── Divider ──────────────────────────────────────────────────────────────── */
+.divider {
+  width: 80%;
+  height: 1px;
+  background: rgba(255,255,255,0.15);
+}

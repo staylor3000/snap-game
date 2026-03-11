@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Snap!</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div id="app">
+  <h1>SNAP!</h1>
+
+  <div id="table">
+
+    <!-- CPU row -->
+    <div class="player-row">
+      <div class="player-label">
+        <strong>CPU</strong>
+        <span id="ai-count">26 cards</span>
+      </div>
+      <div class="deck-visual" id="ai-deck-visual"><span></span></div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Central pile -->
+    <div id="pile-area">
+      <div id="pile-slot">
+        <div class="card empty" id="pile-prev"></div>
+        <div class="card empty" id="pile-top"></div>
+      </div>
+      <div id="pile-count">Pile: 0 cards</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Player row -->
+    <div class="player-row">
+      <div class="player-label">
+        <strong>You</strong>
+        <span id="player-count">26 cards</span>
+      </div>
+      <div class="deck-visual" id="player-deck-visual"><span></span></div>
+    </div>
+
+  </div><!-- /#table -->
+
+  <!-- Controls -->
+  <div id="controls">
+    <button id="btn-flip" class="action-btn">Flip Card</button>
+    <button id="btn-snap" class="action-btn" hidden>SNAP!</button>
+    <div id="status-msg"></div>
+  </div>
+
+</div><!-- /#app -->
+
+<!-- Game-over overlay -->
+<div id="overlay" hidden>
+  <div id="overlay-content">
+    <h2 id="overlay-title"></h2>
+    <p  id="overlay-body"></p>
+    <button id="btn-play-again">Play Again</button>
+  </div>
+</div>
+
+<script src="deck.js"></script>
+<script src="player.js"></script>
+<script src="game.js"></script>
+
+</body>
+</html>
