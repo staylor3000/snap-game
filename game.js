@@ -13,11 +13,13 @@ const elOverBody    = document.getElementById('overlay-body');
 const btnPlayAgain  = document.getElementById('btn-play-again');
 const elAiDeck      = document.getElementById('ai-deck-visual');
 const elPlayerDeck  = document.getElementById('player-deck-visual');
-const elCpuBar      = document.getElementById('cpu-bar');
-const elPlayerBar   = document.getElementById('player-bar');
-const elStreakBox    = document.getElementById('snap-streak');
-const elStreakCount  = document.getElementById('streak-count');
-const elStreakFire   = document.getElementById('streak-fire');
+const elCpuBar          = document.getElementById('cpu-bar');
+const elPlayerBar       = document.getElementById('player-bar');
+const elStreakBox        = document.getElementById('snap-streak');
+const elStreakCount      = document.getElementById('streak-count');
+const elStreakFire       = document.getElementById('streak-fire');
+const elCpuSnapCount    = document.getElementById('cpu-snap-count');
+const elPlayerSnapCount = document.getElementById('player-snap-count');
 
 // ── State ─────────────────────────────────────────────────────────────────────
 let player, ai, pile, state, currentTurn;
@@ -49,6 +51,7 @@ function initGame() {
   renderCounts();
   renderPile();
   renderStreak();
+  renderSnapCounters();
   transition('PLAYER_TURN');
 }
 
@@ -143,6 +146,7 @@ function doPlayerSnap() {
   snapStreak++;
   renderStreak();
   awardPile(player);
+  renderSnapCounters(player);
   setStatus(`You called SNAP and won the pile! 🎉 (streak: ${snapStreak})`);
   currentTurn = 'player';
   transition('PLAYER_TURN');
@@ -155,6 +159,7 @@ function doAiSnap() {
   renderStreak();
   const pileSize = pile.length;
   awardPile(ai);
+  renderSnapCounters(ai);
   setStatus(`CPU called SNAP and won the pile of ${pileSize} cards! 🤖`);
   currentTurn = 'ai';
   transition('PLAYER_TURN');
@@ -242,6 +247,20 @@ function renderStreak() {
   elStreakBox.classList.remove('streak-pop');
   void elStreakBox.offsetWidth;
   elStreakBox.classList.add('streak-pop');
+}
+
+function renderSnapCounters(justScored = null) {
+  elPlayerSnapCount.textContent = player.score;
+  elCpuSnapCount.textContent    = ai.score;
+  // Pop animation on the counter that just changed
+  if (justScored === player) bumpCounter(elPlayerSnapCount);
+  if (justScored === ai)     bumpCounter(elCpuSnapCount);
+}
+
+function bumpCounter(el) {
+  el.classList.remove('pop');
+  void el.offsetWidth;
+  el.classList.add('pop');
 }
 
 function setStatus(msg) {

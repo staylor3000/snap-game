@@ -6,7 +6,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #f8e8ff 0%, #fce4f4 40%, #ede0ff 100%);
+  background: linear-gradient(160deg, #e040a0 0%, #9c27b0 60%, #7b1fa2 100%);
   font-family: 'Georgia', serif;
   color: #3b1f4e;
   overflow: hidden;
@@ -119,13 +119,54 @@ body {
 }
 .streak-pop { animation: streak-pop 0.2s ease-out forwards; }
 
+/* ── Snap counters ────────────────────────────────────────────────────────── */
+#snap-counters {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 2px 2px 6px;
+}
+
+.snap-counter {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.snap-counter-label {
+  font-size: 0.7rem;
+  font-weight: bold;
+  letter-spacing: 0.06em;
+  color: rgba(255,255,255,0.75);
+  text-transform: uppercase;
+}
+
+.snap-counter-value {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #fff;
+  background: rgba(255,255,255,0.2);
+  border-radius: 20px;
+  min-width: 28px;
+  text-align: center;
+  padding: 1px 8px;
+  transition: transform 0.15s;
+}
+
+@keyframes counter-pop {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.4); }
+  100% { transform: scale(1); }
+}
+.snap-counter-value.pop { animation: counter-pop 0.25s ease-out forwards; }
+
 /* ── Table surface ────────────────────────────────────────────────────────── */
 #table {
   width: 100%;
-  background: linear-gradient(160deg, #e040a0 0%, #9c27b0 60%, #7b1fa2 100%);
+  background: linear-gradient(135deg, #f8e8ff 0%, #fce4f4 40%, #ede0ff 100%);
   border: 10px solid #ce93d8;
   border-radius: 24px;
-  box-shadow: 0 0 0 4px #f48fb1, 0 8px 32px rgba(156, 39, 176, 0.35), inset 0 0 50px rgba(0,0,0,0.15);
+  box-shadow: 0 0 0 4px #f48fb1, 0 8px 32px rgba(156, 39, 176, 0.35), inset 0 0 50px rgba(200,100,220,0.08);
   padding: 20px 16px;
   display: flex;
   flex-direction: column;
@@ -145,13 +186,13 @@ body {
 .player-label {
   font-size: 0.85rem;
   letter-spacing: 0.06em;
-  color: #f8bbd9;
+  color: #7b1fa2;
   white-space: nowrap;
 }
 .player-label strong {
   display: block;
   font-size: 1rem;
-  color: #ffffff;
+  color: #4a148c;
 }
 
 /* Face-down deck stack */
@@ -170,8 +211,8 @@ body {
   border-radius: 6px;
   background: repeating-linear-gradient(
     -45deg,
-    #ad1457 0px 6px,
-    #880e4f 6px 12px
+    #9c27b0 0px 6px,
+    #7b1fa2 6px 12px
   );
   border: 1px solid rgba(255,255,255,0.3);
   box-shadow: 1px 1px 4px rgba(0,0,0,0.3);
@@ -197,7 +238,7 @@ body {
 
 #pile-count {
   font-size: 0.8rem;
-  color: #f8bbd9;
+  color: #9c27b0;
   letter-spacing: 0.05em;
 }
 
@@ -352,5 +393,5 @@ body {
 .divider {
   width: 80%;
   height: 1px;
-  background: rgba(255,255,255,0.25);
+  background: rgba(156, 39, 176, 0.2);
 }
