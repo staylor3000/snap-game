@@ -223,10 +223,10 @@ function renderCounts() {
 function setBar(el, ratio) {
   const pct = Math.max(0, Math.min(1, ratio)) * 100;
   el.style.width = `${pct}%`;
-  // Colour: green → yellow → red as health drops
-  if (pct > 50)      el.style.background = `linear-gradient(90deg, #43a047, #66bb6a)`;
-  else if (pct > 25) el.style.background = `linear-gradient(90deg, #f9a825, #ffca28)`;
-  else               el.style.background = `linear-gradient(90deg, #c62828, #ef5350)`;
+  // Colour: purple → pink → hot pink as health drops
+  if (pct > 50)      el.style.background = `linear-gradient(90deg, #ab47bc, #ce93d8)`;
+  else if (pct > 25) el.style.background = `linear-gradient(90deg, #e91e8c, #f48fb1)`;
+  else               el.style.background = `linear-gradient(90deg, #f50057, #ff4081)`;
 }
 
 function renderStreak() {
