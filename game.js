@@ -54,7 +54,7 @@ function transition(newState) {
       btnFlip.disabled = false;
       btnSnap.hidden   = true;
       setStatus(currentTurn === 'player'
-        ? "Your turn — flip a card!"
+        ? "Your turn — flip a card! [Space]"
         : "CPU's turn…");
 
       if (currentTurn === 'ai') {
@@ -73,7 +73,7 @@ function transition(newState) {
     case 'SNAP_WINDOW':
       btnFlip.disabled = true;
       btnSnap.hidden   = false;
-      setStatus(`⚡ SNAP! Both cards are ${pile[pile.length - 1].value}s — call it!`);
+      setStatus(`⚡ SNAP! Both cards are ${pile[pile.length - 1].value}s — call it! [Enter]`);
       // AI races to snap
       aiSnapTimer = setTimeout(doAiSnap, rand(700, 2200));
       // Safety timeout: close window if nobody snaps
@@ -210,6 +210,17 @@ function setStatus(msg) {
 btnFlip.addEventListener('click', doPlayerFlip);
 btnSnap.addEventListener('click', doPlayerSnap);
 btnPlayAgain.addEventListener('click', initGame);
+
+document.addEventListener('keydown', (e) => {
+  if (e.repeat) return;
+  if (e.code === 'Space') {
+    e.preventDefault();
+    doPlayerFlip();
+  } else if (e.code === 'Enter') {
+    e.preventDefault();
+    if (!btnSnap.hidden) doPlayerSnap();
+  }
+});
 
 // ── Start ─────────────────────────────────────────────────────────────────────
 initGame();
