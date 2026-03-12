@@ -25,6 +25,7 @@
         <span id="streak-fire">🔥</span><span id="streak-count">0</span>
       </div>
       <div id="hud-vs">VS</div>
+      <div id="level-badge">LVL <span id="level-num">1</span></div>
     </div>
 
     <div class="hud-player" id="hud-you">
@@ -70,6 +71,10 @@
   <div id="controls">
     <button id="btn-flip" class="action-btn">Flip Card</button>
     <button id="btn-snap" class="action-btn" hidden>SNAP!</button>
+    <div id="snap-stats" class="hidden">
+      <span class="stat-pill" id="stat-last">⚡ Last: —</span>
+      <span class="stat-pill" id="stat-best">🏆 Best: —</span>
+    </div>
     <div id="status-msg"></div>
   </div>
 
@@ -80,6 +85,7 @@
   <div id="overlay-content">
     <h2 id="overlay-title"></h2>
     <p  id="overlay-body"></p>
+    <p  id="overlay-level" class="hidden"></p>
     <button id="btn-play-again">Play Again</button>
   </div>
 </div>
