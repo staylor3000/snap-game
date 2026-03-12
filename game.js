@@ -4,6 +4,7 @@ const elPlayerCount  = document.getElementById('player-count');
 const elPileCount    = document.getElementById('pile-count');
 const elPileCards    = document.getElementById('pile-cards');
 const elPileArea     = document.getElementById('pile-area');
+const elPileFace     = document.getElementById('pile-face');
 const elPileCardPrev = document.getElementById('pile-card-prev');
 const elPileCardTop  = document.getElementById('pile-card-top');
 const elStatus       = document.getElementById('status-msg');
@@ -315,6 +316,11 @@ function renderPile() {
 
 function updatePileVisual() {
   const count = pile.length;
+
+  const faces = ['😴', '😐', '🙂', '😯', '😮', '😲', '😱', '🤯'];
+  const faceIdx = count === 0 ? 0 : Math.min(Math.floor(count / 4) + 1, faces.length - 1);
+  elPileFace.textContent  = faces[faceIdx];
+  elPileFace.style.fontSize = `${(1.8 + Math.min(count / 26, 1) * 1.0).toFixed(2)}rem`;
 
   if (count === 0) {
     elPileCards.style.transform = '';
