@@ -40,6 +40,8 @@ const elStatRate          = document.getElementById('stat-rate');
 const elStatRateSession   = document.getElementById('stat-rate-session');
 const elStatMisses        = document.getElementById('stat-misses');
 const elStatMissesSession = document.getElementById('stat-misses-session');
+const elCpuTurnTag  = document.getElementById('cpu-turn-tag');
+const elYouTurnTag  = document.getElementById('you-turn-tag');
 
 // ── Persistence ───────────────────────────────────────────────────────────────
 let level    = Math.min(100, Math.max(1, parseInt(localStorage.getItem('snap-level') || '1', 10)));
@@ -166,6 +168,7 @@ function transition(newState) {
       break;
     }
   }
+  renderTurnIndicator();
 }
 
 // ── Flip logic ────────────────────────────────────────────────────────────────
@@ -321,10 +324,10 @@ function renderPile() {
 function updatePileVisual() {
   const count = pile.length;
 
-  const faces = ['😴', '😐', '🙂', '😯', '😮', '😲', '😱', '🤯'];
+  const faces = ['😑', '😬', '😟', '😰', '😨', '😧', '😱', '🤯'];
   const faceIdx = count === 0 ? 0 : Math.min(Math.floor(count / 4) + 1, faces.length - 1);
   elPileFace.textContent  = faces[faceIdx];
-  elPileFace.style.fontSize = `${(1.8 + Math.min(count / 26, 1) * 1.0).toFixed(2)}rem`;
+  elPileFace.style.fontSize = `${(7 + Math.min(count / 26, 1) * 2.5).toFixed(2)}rem`;
 
   if (count === 0) {
     elPileCards.style.transform = '';
@@ -441,6 +444,13 @@ function bumpCounter(el) {
 }
 
 function setStatus(msg) { elStatus.textContent = msg; }
+
+function renderTurnIndicator() {
+  const playerTurn = state === 'PLAYER_TURN' && currentTurn === 'player';
+  const cpuTurn    = state === 'AWAITING_AI' || (state === 'PLAYER_TURN' && currentTurn === 'ai');
+  elYouTurnTag.textContent  = playerTurn ? '▶ YOUR TURN' : '';
+  elCpuTurnTag.textContent  = cpuTurn    ? '▶ YOUR TURN' : '';
+}
 
 // ── Share ──────────────────────────────────────────────────────────────────────
 function buildShareUrl() {
