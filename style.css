@@ -341,7 +341,7 @@ body {
   70%  { transform: scale(1.12); }
   100% { transform: scale(1);   opacity: 1; }
 }
-#btn-snap:not([hidden]) { animation: snap-pulse 0.22s ease-out forwards; }
+#btn-snap.snap-active { animation: snap-pulse 0.22s ease-out forwards; }
 
 /* ── Game-over overlay ────────────────────────────────────────────────────── */
 #overlay {
