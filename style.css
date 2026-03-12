@@ -168,21 +168,29 @@ body {
   border: 10px solid #ce93d8;
   border-radius: 24px;
   box-shadow: 0 0 0 4px #f48fb1, 0 8px 32px rgba(156, 39, 176, 0.35), inset 0 0 50px rgba(200,100,220,0.08);
-  padding: 20px 16px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
 }
 
 /* ── Player rows ──────────────────────────────────────────────────────────── */
 .player-row {
   width: 100%;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+  gap: 8px;
 }
+
+/* CPU row: label left, deck right */
+#cpu-row .player-label  { justify-self: start; }
+#cpu-row .card-stack    { justify-self: end; }
+
+/* Player row: deck left, label right */
+#player-row .card-stack    { justify-self: start; }
+#player-row .player-label  { justify-self: end; }
 
 .player-label {
   font-size: 0.85rem;
@@ -222,16 +230,9 @@ body {
   box-shadow: none !important;
 }
 
-/* ── Pile area ────────────────────────────────────────────────────────────── */
-#pile-area {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  width: 100%;
-}
-
+/* ── Pile count ───────────────────────────────────────────────────────────── */
 #pile-count {
+  text-align: center;
   font-size: 0.8rem;
   color: #9c27b0;
   letter-spacing: 0.05em;
@@ -384,9 +385,3 @@ body {
 }
 #btn-play-again:hover { transform: scale(1.04); }
 
-/* ── Divider ──────────────────────────────────────────────────────────────── */
-.divider {
-  width: 80%;
-  height: 1px;
-  background: rgba(156, 39, 176, 0.2);
-}
