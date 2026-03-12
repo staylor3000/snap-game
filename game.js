@@ -2,6 +2,8 @@
 const elAiCount      = document.getElementById('ai-count');
 const elPlayerCount  = document.getElementById('player-count');
 const elPileCount    = document.getElementById('pile-count');
+const elPileCards    = document.getElementById('pile-cards');
+const elPileArea     = document.getElementById('pile-area');
 const elPileCardPrev = document.getElementById('pile-card-prev');
 const elPileCardTop  = document.getElementById('pile-card-top');
 const elStatus       = document.getElementById('status-msg');
@@ -307,7 +309,46 @@ function renderPile() {
   renderCard(elPileCardPrev, prev, false);
   renderCard(elPileCardTop,  top,  true);
   elPileCount.textContent = `Pile: ${pile.length} card${pile.length !== 1 ? 's' : ''}`;
+  updatePileVisual();
   updateSnapBtn();
+}
+
+function updatePileVisual() {
+  const count = pile.length;
+
+  if (count === 0) {
+    elPileCards.style.transform = '';
+    elPileCardPrev.style.boxShadow = '';
+    elPileArea.style.filter = '';
+    elPileCount.style.cssText = '';
+    return;
+  }
+
+  // Depth shadow — layers stack up behind the prev card
+  const layers = Math.min(count, 12);
+  const shadows = [];
+  for (let i = 1; i <= layers; i++) {
+    shadows.push(`${i * 2}px ${i * 2}px 0 rgba(106,27,154,0.65)`);
+  }
+  elPileCardPrev.style.boxShadow = shadows.join(', ');
+
+  // Scale grows from 1.0 → 1.22 as pile approaches 26 cards
+  const t = Math.min(count / 26, 1);
+  const scale = (1 + t * 0.22).toFixed(3);
+  elPileCards.style.transform = `scale(${scale})`;
+
+  // Glow intensifies with pile size
+  const glowPx   = Math.round(t * 22);
+  const glowAlpha = (t * 0.7).toFixed(2);
+  elPileArea.style.filter = `drop-shadow(0 0 ${glowPx}px rgba(233,30,140,${glowAlpha}))`;
+
+  // Pile count text shifts from muted → alarming
+  const r = Math.round(123 + t * 110);  // 123 → 233
+  const g = Math.round(31  - t * 31);   // 31  → 0
+  const b = Math.round(162 - t * 22);   // 162 → 140
+  elPileCount.style.color    = `rgb(${r},${g},${b})`;
+  elPileCount.style.fontSize = `${(0.8 + t * 0.3).toFixed(2)}rem`;
+  elPileCount.style.fontWeight = t > 0.5 ? 'bold' : '';
 }
 
 function updateSnapBtn() {
