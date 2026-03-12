@@ -42,6 +42,9 @@ const elStatMisses        = document.getElementById('stat-misses');
 const elStatMissesSession = document.getElementById('stat-misses-session');
 const elCpuTurnTag  = document.getElementById('cpu-turn-tag');
 const elYouTurnTag  = document.getElementById('you-turn-tag');
+const elSnapFlash   = document.getElementById('snap-flash');
+const elCpuLabel    = document.getElementById('cpu-label');
+const elYouLabel    = document.getElementById('you-label');
 
 // ── Persistence ───────────────────────────────────────────────────────────────
 let level    = Math.min(100, Math.max(1, parseInt(localStorage.getItem('snap-level') || '1', 10)));
@@ -212,6 +215,7 @@ function doPlayerSnap() {
   if (state === 'SNAP_WINDOW') {
     clearTimeout(aiSnapTimer);
     clearTimeout(noSnapTimer);
+    showSnapFlash('snap', elYouLabel);
 
     const elapsed = (Date.now() - snapWindowOpenTime) / 1000;
     if (elapsed < bestSnap)    { bestSnap = elapsed; saveBest(); }
@@ -233,6 +237,7 @@ function doPlayerSnap() {
     clearTimeout(aiFlipTimer);
     clearTimeout(aiSnapTimer);
     clearTimeout(noSnapTimer);
+    showSnapFlash('deny', elYouLabel);
     snapStreak = 0;
     playerSnapMisses++;
     sessionSnapMisses++;
@@ -250,6 +255,7 @@ function doPlayerSnap() {
 function doAiSnap() {
   if (state !== 'SNAP_WINDOW') return;
   clearTimeout(noSnapTimer);
+  showSnapFlash('snap', elCpuLabel);
   snapStreak = 0;
   renderStreak();
   const pileSize = pile.length;
@@ -262,6 +268,7 @@ function doAiSnap() {
 
 function doCpuFalseSnap() {
   if (state !== 'PLAYER_TURN' && state !== 'AWAITING_AI') return;
+  showSnapFlash('deny', elCpuLabel);
   snapStreak = 0;
   renderStreak();
   const won = pile.length;
@@ -324,7 +331,7 @@ function renderPile() {
 function updatePileVisual() {
   const count = pile.length;
 
-  const faces = ['😑', '😬', '😟', '😰', '😨', '😧', '😱', '🤯'];
+  const faces = ['😶', '😬', '😟', '😰', '😨', '😧', '😱', '🤯'];
   const faceIdx = count === 0 ? 0 : Math.min(Math.floor(count / 4) + 1, faces.length - 1);
   elPileFace.textContent  = faces[faceIdx];
   elPileFace.style.fontSize = `${(7 + Math.min(count / 26, 1) * 2.5).toFixed(2)}rem`;
@@ -444,6 +451,18 @@ function bumpCounter(el) {
 }
 
 function setStatus(msg) { elStatus.textContent = msg; }
+
+function showSnapFlash(type, targetEl) {
+  const rect = targetEl.getBoundingClientRect();
+  elSnapFlash.style.left = `${rect.left + rect.width / 2}px`;
+  elSnapFlash.style.top  = `${rect.top  + rect.height / 2}px`;
+  elSnapFlash.className = '';
+  elSnapFlash.innerHTML = type === 'snap'
+    ? '<span class="flash-emoji">💥</span><span class="flash-label">SNAP!</span>'
+    : '<span class="flash-emoji">❌</span><span class="flash-label">DENIED</span>';
+  void elSnapFlash.offsetWidth;
+  elSnapFlash.classList.add(type === 'snap' ? 'flash-snap' : 'flash-deny');
+}
 
 function renderTurnIndicator() {
   const playerTurn = state === 'PLAYER_TURN' && currentTurn === 'player';
