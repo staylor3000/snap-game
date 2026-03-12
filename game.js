@@ -1,29 +1,28 @@
 // ── DOM refs ──────────────────────────────────────────────────────────────────
-const elAiCount     = document.getElementById('ai-count');
-const elPlayerCount = document.getElementById('player-count');
-const elPileCount   = document.getElementById('pile-count');
-const elCpuCard     = document.getElementById('cpu-card');
-const elPlayerCard  = document.getElementById('player-card');
-const elStatus      = document.getElementById('status-msg');
-const btnFlip       = document.getElementById('btn-flip');
-const btnSnap       = document.getElementById('btn-snap');
-const elOverlay     = document.getElementById('overlay');
-const elOverTitle   = document.getElementById('overlay-title');
-const elOverBody    = document.getElementById('overlay-body');
-const btnPlayAgain  = document.getElementById('btn-play-again');
-const elAiDeck      = document.getElementById('ai-deck-visual');
-const elPlayerDeck  = document.getElementById('player-deck-visual');
-const elCpuBar          = document.getElementById('cpu-bar');
-const elPlayerBar       = document.getElementById('player-bar');
-const elStreakBox        = document.getElementById('snap-streak');
-const elStreakCount      = document.getElementById('streak-count');
-const elStreakFire       = document.getElementById('streak-fire');
-const elCpuSnapCount    = document.getElementById('cpu-snap-count');
-const elPlayerSnapCount = document.getElementById('player-snap-count');
+const elAiCount      = document.getElementById('ai-count');
+const elPlayerCount  = document.getElementById('player-count');
+const elPileCount    = document.getElementById('pile-count');
+const elPileCardPrev = document.getElementById('pile-card-prev');
+const elPileCardTop  = document.getElementById('pile-card-top');
+const elStatus       = document.getElementById('status-msg');
+const btnFlip        = document.getElementById('btn-flip');
+const btnSnap        = document.getElementById('btn-snap');
+const elOverlay      = document.getElementById('overlay');
+const elOverTitle    = document.getElementById('overlay-title');
+const elOverBody     = document.getElementById('overlay-body');
+const btnPlayAgain   = document.getElementById('btn-play-again');
+const elAiDeck       = document.getElementById('ai-deck-visual');
+const elPlayerDeck   = document.getElementById('player-deck-visual');
+const elCpuBar           = document.getElementById('cpu-bar');
+const elPlayerBar        = document.getElementById('player-bar');
+const elStreakBox         = document.getElementById('snap-streak');
+const elStreakCount       = document.getElementById('streak-count');
+const elStreakFire        = document.getElementById('streak-fire');
+const elCpuSnapCount     = document.getElementById('cpu-snap-count');
+const elPlayerSnapCount  = document.getElementById('player-snap-count');
 
 // ── State ─────────────────────────────────────────────────────────────────────
 let player, ai, pile, state, currentTurn;
-let cpuLastCard, playerLastCard;
 let aiFlipTimer, aiSnapTimer, noSnapTimer;
 let snapStreak = 0;
 
@@ -45,10 +44,8 @@ function initGame() {
   player.hand = h1;
   ai.hand     = h2;
 
-  currentTurn  = 'player';
-  cpuLastCard  = null;
-  playerLastCard = null;
-  snapStreak   = 0;
+  currentTurn = 'player';
+  snapStreak  = 0;
   elOverlay.hidden = true;
 
   renderCounts();
@@ -73,7 +70,7 @@ function transition(newState) {
 
       if (currentTurn === 'ai') {
         btnFlip.disabled = true;
-        aiFlipTimer = setTimeout(doAiFlip, rand(700, 1300));
+        aiFlipTimer = setTimeout(doAiFlip, rand(1500, 2500));
       }
       break;
 
@@ -81,7 +78,7 @@ function transition(newState) {
       btnFlip.disabled = true;
       btnSnap.classList.remove('snap-active');
       setStatus("CPU is thinking…");
-      aiFlipTimer = setTimeout(doAiFlip, rand(700, 1300));
+      aiFlipTimer = setTimeout(doAiFlip, rand(1500, 2500));
       break;
 
     case 'SNAP_WINDOW':
@@ -119,7 +116,6 @@ function doPlayerFlip() {
   const card = player.flip();
   if (!card) { transition('GAME_OVER'); return; }
   pile.push(card);
-  playerLastCard = card;
   renderPile();
   renderCounts();
   if (checkSnap()) { transition('SNAP_WINDOW'); return; }
@@ -131,7 +127,6 @@ function doAiFlip() {
   if (!ai.hasCards()) { transition('GAME_OVER'); return; }
   const card = ai.flip();
   pile.push(card);
-  cpuLastCard = card;
   renderPile();
   renderCounts();
   if (checkSnap()) { transition('SNAP_WINDOW'); return; }
@@ -194,7 +189,6 @@ function doAiSnap() {
 }
 
 function doCpuFalseSnap() {
-  // Guard: state may have changed (e.g. player snapped first)
   if (state !== 'PLAYER_TURN' && state !== 'AWAITING_AI') return;
   snapStreak = 0;
   renderStreak();
@@ -218,17 +212,15 @@ function noSnap() {
 }
 
 function awardPile(winner) {
-  const won = pile.splice(0);   // take all, reset pile
+  const won = pile.splice(0);
   winner.takeCards(won);
   winner.score++;
-  cpuLastCard    = null;
-  playerLastCard = null;
   renderCounts();
   renderPile();
 }
 
 // ── Render helpers ────────────────────────────────────────────────────────────
-function renderCard(el, card) {
+function renderCard(el, card, animate = true) {
   if (!card) {
     el.className = 'card empty';
     el.innerHTML = '';
@@ -240,15 +232,18 @@ function renderCard(el, card) {
     <span class="center-suit">${card.symbol}</span>
     <span class="corner bottom-right">${card.value}<br>${card.symbol}</span>
   `;
-  // Trigger flip-in animation
-  el.classList.remove('flip-in');
-  void el.offsetWidth; // reflow
-  el.classList.add('flip-in');
+  if (animate) {
+    el.classList.remove('flip-in');
+    void el.offsetWidth;
+    el.classList.add('flip-in');
+  }
 }
 
 function renderPile() {
-  renderCard(elCpuCard,    cpuLastCard);
-  renderCard(elPlayerCard, playerLastCard);
+  const top  = pile.length > 0 ? pile[pile.length - 1] : null;
+  const prev = pile.length > 1 ? pile[pile.length - 2] : null;
+  renderCard(elPileCardPrev, prev, false);
+  renderCard(elPileCardTop,  top,  true);
   elPileCount.textContent = `Pile: ${pile.length} card${pile.length !== 1 ? 's' : ''}`;
   updateSnapBtn();
 }
@@ -264,10 +259,8 @@ function renderCounts() {
   updateStack(elPlayerDeck, player.cardCount);
   updateStack(elAiDeck,     ai.cardCount);
 
-  // Health bars — percentage of the 52-card total each player holds
-  const total = player.cardCount + ai.cardCount + pile.length || 52;
   setBar(elPlayerBar, player.cardCount / 52);
-  setBar(elCpuBar,    ai.cardCount    / 52);
+  setBar(elCpuBar,    ai.cardCount     / 52);
 }
 
 function updateStack(containerEl, count) {
@@ -277,7 +270,6 @@ function updateStack(containerEl, count) {
     return;
   }
   card.classList.remove('empty');
-  // Scale 1–52 onto 1–12 visual layers
   const layers = Math.max(1, Math.round((count / 52) * 12));
   const shadows = [];
   for (let i = 1; i <= layers; i++) {
@@ -290,7 +282,6 @@ function updateStack(containerEl, count) {
 function setBar(el, ratio) {
   const pct = Math.max(0, Math.min(1, ratio)) * 100;
   el.style.width = `${pct}%`;
-  // Colour: purple → pink → hot pink as health drops
   if (pct > 50)      el.style.background = `linear-gradient(90deg, #ab47bc, #ce93d8)`;
   else if (pct > 25) el.style.background = `linear-gradient(90deg, #e91e8c, #f48fb1)`;
   else               el.style.background = `linear-gradient(90deg, #f50057, #ff4081)`;
@@ -303,9 +294,7 @@ function renderStreak() {
   }
   elStreakBox.classList.remove('hidden');
   elStreakCount.textContent = `×${snapStreak}`;
-  // Escalating fire emoji
   elStreakFire.textContent = snapStreak >= 5 ? '🔥🔥🔥' : snapStreak >= 3 ? '🔥🔥' : '🔥';
-  // Pop animation
   elStreakBox.classList.remove('streak-pop');
   void elStreakBox.offsetWidth;
   elStreakBox.classList.add('streak-pop');
@@ -314,7 +303,6 @@ function renderStreak() {
 function renderSnapCounters(justScored = null) {
   elPlayerSnapCount.textContent = player.score;
   elCpuSnapCount.textContent    = ai.score;
-  // Pop animation on the counter that just changed
   if (justScored === player) bumpCounter(elPlayerSnapCount);
   if (justScored === ai)     bumpCounter(elCpuSnapCount);
 }
