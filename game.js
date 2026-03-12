@@ -2,8 +2,8 @@
 const elAiCount     = document.getElementById('ai-count');
 const elPlayerCount = document.getElementById('player-count');
 const elPileCount   = document.getElementById('pile-count');
-const elPilePrev    = document.getElementById('pile-prev');
-const elPileTop     = document.getElementById('pile-top');
+const elCpuCard     = document.getElementById('cpu-card');
+const elPlayerCard  = document.getElementById('player-card');
 const elStatus      = document.getElementById('status-msg');
 const btnFlip       = document.getElementById('btn-flip');
 const btnSnap       = document.getElementById('btn-snap');
@@ -23,6 +23,7 @@ const elPlayerSnapCount = document.getElementById('player-snap-count');
 
 // ── State ─────────────────────────────────────────────────────────────────────
 let player, ai, pile, state, currentTurn;
+let cpuLastCard, playerLastCard;
 let aiFlipTimer, aiSnapTimer, noSnapTimer;
 let snapStreak = 0;
 
@@ -44,7 +45,9 @@ function initGame() {
   player.hand = h1;
   ai.hand     = h2;
 
-  currentTurn = 'player';
+  currentTurn  = 'player';
+  cpuLastCard  = null;
+  playerLastCard = null;
   snapStreak   = 0;
   elOverlay.hidden = true;
 
@@ -115,6 +118,7 @@ function doPlayerFlip() {
   const card = player.flip();
   if (!card) { transition('GAME_OVER'); return; }
   pile.push(card);
+  playerLastCard = card;
   renderPile();
   renderCounts();
   if (checkSnap()) { transition('SNAP_WINDOW'); return; }
@@ -126,6 +130,7 @@ function doAiFlip() {
   if (!ai.hasCards()) { transition('GAME_OVER'); return; }
   const card = ai.flip();
   pile.push(card);
+  cpuLastCard = card;
   renderPile();
   renderCounts();
   if (checkSnap()) { transition('SNAP_WINDOW'); return; }
@@ -180,6 +185,8 @@ function awardPile(winner) {
   const won = pile.splice(0);   // take all, reset pile
   winner.takeCards(won);
   winner.score++;
+  cpuLastCard    = null;
+  playerLastCard = null;
   renderCounts();
   renderPile();
 }
@@ -204,10 +211,8 @@ function renderCard(el, card) {
 }
 
 function renderPile() {
-  const top  = pile.length > 0 ? pile[pile.length - 1] : null;
-  const prev = pile.length > 1 ? pile[pile.length - 2] : null;
-  renderCard(elPileTop,  top);
-  renderCard(elPilePrev, prev);
+  renderCard(elCpuCard,    cpuLastCard);
+  renderCard(elPlayerCard, playerLastCard);
   elPileCount.textContent = `Pile: ${pile.length} card${pile.length !== 1 ? 's' : ''}`;
 }
 
