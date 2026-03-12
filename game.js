@@ -21,10 +21,18 @@ const elStreakCount       = document.getElementById('streak-count');
 const elStreakFire        = document.getElementById('streak-fire');
 const elCpuSnapCount     = document.getElementById('cpu-snap-count');
 const elPlayerSnapCount  = document.getElementById('player-snap-count');
-const elLevelNum         = document.getElementById('level-num');
-const elSnapStats        = document.getElementById('snap-stats');
-const elStatLast         = document.getElementById('stat-last');
-const elStatBest         = document.getElementById('stat-best');
+const elLevelNum          = document.getElementById('level-num');
+const elLevelProgressFill = document.getElementById('level-progress-fill');
+const elLevelProgressNum  = document.getElementById('level-progress-num');
+const elStatLast          = document.getElementById('stat-last');
+const elStatBest          = document.getElementById('stat-best');
+const elStatBestSession   = document.getElementById('stat-best-session');
+const elStatHits          = document.getElementById('stat-hits');
+const elStatHitsSession   = document.getElementById('stat-hits-session');
+const elStatRate          = document.getElementById('stat-rate');
+const elStatRateSession   = document.getElementById('stat-rate-session');
+const elStatMisses        = document.getElementById('stat-misses');
+const elStatMissesSession = document.getElementById('stat-misses-session');
 
 // ── Persistence ───────────────────────────────────────────────────────────────
 let level    = Math.min(100, Math.max(1, parseInt(localStorage.getItem('snap-level') || '1', 10)));
@@ -38,6 +46,15 @@ let player, ai, pile, state, currentTurn;
 let aiFlipTimer, aiSnapTimer, noSnapTimer;
 let snapStreak = 0;
 let snapWindowOpenTime = 0;
+let lastSnapTime = null;
+let gameBestSnap     = Infinity;
+let playerSnapHits   = 0;
+let playerSnapMisses = 0;
+
+// Session stats — accumulate across games, reset on page load
+let sessionBestSnap   = Infinity;
+let sessionSnapHits   = 0;
+let sessionSnapMisses = 0;
 
 const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
@@ -63,8 +80,12 @@ function initGame() {
   player.hand = h1;
   ai.hand     = h2;
 
-  currentTurn = 'player';
-  snapStreak  = 0;
+  currentTurn      = 'player';
+  snapStreak       = 0;
+  lastSnapTime     = null;
+  gameBestSnap     = Infinity;
+  playerSnapHits   = 0;
+  playerSnapMisses = 0;
   elOverlay.hidden = true;
 
   renderLevel();
@@ -182,10 +203,14 @@ function doPlayerSnap() {
     clearTimeout(aiSnapTimer);
     clearTimeout(noSnapTimer);
 
-    // Record snap response time
     const elapsed = (Date.now() - snapWindowOpenTime) / 1000;
-    if (elapsed < bestSnap) { bestSnap = elapsed; saveBest(); }
-    renderSnapStats(elapsed);
+    if (elapsed < bestSnap)    { bestSnap = elapsed; saveBest(); }
+    if (elapsed < gameBestSnap)    { gameBestSnap    = elapsed; }
+    if (elapsed < sessionBestSnap) { sessionBestSnap = elapsed; }
+    lastSnapTime = elapsed;
+    playerSnapHits++;
+    sessionSnapHits++;
+    renderSnapStats();
 
     snapStreak++;
     renderStreak();
@@ -199,7 +224,10 @@ function doPlayerSnap() {
     clearTimeout(aiSnapTimer);
     clearTimeout(noSnapTimer);
     snapStreak = 0;
+    playerSnapMisses++;
+    sessionSnapMisses++;
     renderStreak();
+    renderSnapStats();
     const lost = pile.length;
     awardPile(ai);
     renderSnapCounters(ai);
@@ -287,14 +315,26 @@ function updateSnapBtn() {
 }
 
 function renderLevel() {
-  elLevelNum.textContent = level;
+  elLevelNum.textContent         = level;
+  elLevelProgressNum.textContent = level;
+  elLevelProgressFill.style.width = `${level}%`;
 }
 
-function renderSnapStats(lastMs = null) {
-  if (lastMs === null && !isFinite(bestSnap)) return;
-  elSnapStats.classList.remove('hidden');
-  if (lastMs !== null) elStatLast.textContent = `⚡ Last: ${lastMs.toFixed(2)}s`;
-  elStatBest.textContent = isFinite(bestSnap) ? `🏆 Best: ${bestSnap.toFixed(2)}s` : `🏆 Best: —`;
+function renderSnapStats() {
+  // Game column
+  elStatLast.textContent   = lastSnapTime !== null  ? `${lastSnapTime.toFixed(2)}s` : '—';
+  elStatBest.textContent   = isFinite(gameBestSnap) ? `${gameBestSnap.toFixed(2)}s` : '—';
+  elStatHits.textContent   = playerSnapHits;
+  elStatMisses.textContent = playerSnapMisses;
+  const gameTotal = playerSnapHits + playerSnapMisses;
+  elStatRate.textContent   = gameTotal > 0 ? `${Math.round((playerSnapHits / gameTotal) * 100)}%` : '—';
+
+  // Session column
+  elStatBestSession.textContent   = isFinite(sessionBestSnap) ? `${sessionBestSnap.toFixed(2)}s` : '—';
+  elStatHitsSession.textContent   = sessionSnapHits;
+  elStatMissesSession.textContent = sessionSnapMisses;
+  const sessTotal = sessionSnapHits + sessionSnapMisses;
+  elStatRateSession.textContent   = sessTotal > 0 ? `${Math.round((sessionSnapHits / sessTotal) * 100)}%` : '—';
 }
 
 function renderCounts() {
