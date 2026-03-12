@@ -50,23 +50,23 @@
 
   <div id="table">
 
-    <!-- CPU row: name + deck + played card -->
-    <div class="player-row">
+    <!-- CPU row: name + played card + deck -->
+    <div class="player-row" id="cpu-row">
       <div class="player-label"><strong>CPU</strong></div>
+      <div class="card empty" id="cpu-card"></div>
       <div class="card-stack" id="ai-deck-visual">
         <div class="stack-card"></div>
       </div>
-      <div class="card empty" id="cpu-card"></div>
     </div>
 
     <div id="pile-count">Pile: 0 cards</div>
 
-    <!-- Player row: played card + deck + name -->
-    <div class="player-row">
-      <div class="card empty" id="player-card"></div>
+    <!-- Player row: deck + played card + name -->
+    <div class="player-row" id="player-row">
       <div class="card-stack" id="player-deck-visual">
         <div class="stack-card"></div>
       </div>
+      <div class="card empty" id="player-card"></div>
       <div class="player-label" style="text-align:right"><strong>You</strong></div>
     </div>
 
