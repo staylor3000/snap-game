@@ -14,7 +14,11 @@ const elOverlay      = document.getElementById('overlay');
 const elOverTitle    = document.getElementById('overlay-title');
 const elOverBody     = document.getElementById('overlay-body');
 const elOverLevel    = document.getElementById('overlay-level');
+const btnShare       = document.getElementById('btn-share');
+const elShareConfirm = document.getElementById('share-confirm');
 const btnPlayAgain   = document.getElementById('btn-play-again');
+const elChallengeBanner = document.getElementById('challenge-banner');
+const elChallengeText   = document.getElementById('challenge-text');
 const elAiDeck       = document.getElementById('ai-deck-visual');
 const elPlayerDeck   = document.getElementById('player-deck-visual');
 const elCpuBar           = document.getElementById('cpu-bar');
@@ -438,9 +442,42 @@ function bumpCounter(el) {
 
 function setStatus(msg) { elStatus.textContent = msg; }
 
+// ── Share ──────────────────────────────────────────────────────────────────────
+function buildShareUrl() {
+  const params = new URLSearchParams({ piles: player.score, level });
+  if (isFinite(gameBestSnap)) params.set('best', gameBestSnap.toFixed(2));
+  const base = window.location.href.split('?')[0];
+  return `${base}?${params}`;
+}
+
+function doShare() {
+  const url  = buildShareUrl();
+  const best = isFinite(gameBestSnap) ? ` with a best snap of ${gameBestSnap.toFixed(2)}s` : '';
+  const text = `I beat the CPU at Snap! 🃏 Won ${player.score} pile${player.score !== 1 ? 's' : ''} at level ${level}${best}. Think you can beat me? ${url}`;
+  navigator.clipboard.writeText(text).then(() => {
+    elShareConfirm.classList.remove('hidden');
+    setTimeout(() => elShareConfirm.classList.add('hidden'), 2500);
+  });
+}
+
+// ── Challenge banner on load ───────────────────────────────────────────────────
+function checkChallengeBanner() {
+  const params = new URLSearchParams(window.location.search);
+  const piles  = params.get('piles');
+  const lvl    = params.get('level');
+  const best   = params.get('best');
+  if (!piles || !lvl) return;
+  let msg = `🏆 Challenge: can you win more than ${piles} pile${piles !== '1' ? 's' : ''} at level ${lvl}`;
+  if (best) msg += ` with a snap faster than ${best}s`;
+  msg += `? Good luck!`;
+  elChallengeText.textContent = msg;
+  elChallengeBanner.classList.remove('hidden');
+}
+
 // ── Event listeners ───────────────────────────────────────────────────────────
 btnFlip.addEventListener('click', doPlayerFlip);
 btnSnap.addEventListener('click', doPlayerSnap);
+btnShare.addEventListener('click', doShare);
 btnPlayAgain.addEventListener('click', initGame);
 
 document.addEventListener('keydown', (e) => {
@@ -455,4 +492,5 @@ document.addEventListener('keydown', (e) => {
 });
 
 // ── Start ─────────────────────────────────────────────────────────────────────
+checkChallengeBanner();
 initGame();
