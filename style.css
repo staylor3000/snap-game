@@ -258,6 +258,32 @@ body {
   color: #4a148c;
 }
 
+.turn-tag {
+  display: block;
+  font-size: 0.55rem;
+  font-weight: bold;
+  letter-spacing: 0.07em;
+  color: #fff;
+  background: linear-gradient(135deg, #e91e8c, #9c27b0);
+  border-radius: 5px;
+  padding: 1px 5px;
+  margin-top: 3px;
+  text-transform: uppercase;
+  min-height: 1em;
+}
+.turn-tag:empty {
+  background: none;
+  padding: 0;
+  margin: 0;
+}
+@keyframes turn-pulse {
+  from { opacity: 0.75; transform: scale(0.97); }
+  to   { opacity: 1;    transform: scale(1.03); }
+}
+.turn-tag:not(:empty) {
+  animation: turn-pulse 0.55s ease-in-out infinite alternate;
+}
+
 /* Card stack visualisation */
 .card-stack {
   /* Padding lets the box-shadow stack be visible without clipping */
@@ -349,7 +375,7 @@ body {
   right: calc(100% + 8px);
   top: 50%;
   transform: translateY(-50%);
-  font-size: 1.8rem;
+  font-size: 7rem;
   line-height: 1;
   user-select: none;
   transition: font-size 0.35s ease;
