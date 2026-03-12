@@ -66,7 +66,7 @@ function transition(newState) {
     case 'PLAYER_TURN':
       if (!player.hasCards()) { transition('GAME_OVER'); return; }
       btnFlip.disabled = false;
-      btnSnap.hidden   = true;
+      btnSnap.classList.remove('snap-active');
       setStatus(currentTurn === 'player'
         ? "Your turn — flip a card! [Space]"
         : "CPU's turn…");
@@ -79,14 +79,14 @@ function transition(newState) {
 
     case 'AWAITING_AI':
       btnFlip.disabled = true;
-      btnSnap.hidden   = true;
+      btnSnap.classList.remove('snap-active');
       setStatus("CPU is thinking…");
       aiFlipTimer = setTimeout(doAiFlip, rand(700, 1300));
       break;
 
     case 'SNAP_WINDOW':
       btnFlip.disabled = true;
-      btnSnap.hidden   = false;
+      btnSnap.classList.add('snap-active');
       setStatus(`⚡ SNAP! Both cards are ${pile[pile.length - 1].value}s — call it! [Enter]`);
       // AI races to snap
       aiSnapTimer = setTimeout(doAiSnap, rand(700, 2200));
@@ -97,6 +97,7 @@ function transition(newState) {
     case 'GAME_OVER': {
       btnFlip.disabled = true;
       btnSnap.hidden   = true;
+      btnSnap.classList.remove('snap-active');
       clearTimeout(aiFlipTimer);
       clearTimeout(aiSnapTimer);
       clearTimeout(noSnapTimer);
@@ -134,6 +135,11 @@ function doAiFlip() {
   renderPile();
   renderCounts();
   if (checkSnap()) { transition('SNAP_WINDOW'); return; }
+  // Small chance CPU false-snaps
+  if (pile.length > 1 && Math.random() < 0.08) {
+    setTimeout(doCpuFalseSnap, rand(300, 800));
+    return;
+  }
   currentTurn = 'player';
   transition('PLAYER_TURN');
 }
@@ -145,16 +151,33 @@ function checkSnap() {
 }
 
 function doPlayerSnap() {
-  if (state !== 'SNAP_WINDOW') return;
-  clearTimeout(aiSnapTimer);
-  clearTimeout(noSnapTimer);
-  snapStreak++;
-  renderStreak();
-  awardPile(player);
-  renderSnapCounters(player);
-  setStatus(`You called SNAP and won the pile! 🎉 (streak: ${snapStreak})`);
-  currentTurn = 'player';
-  transition('PLAYER_TURN');
+  if (state === 'GAME_OVER' || pile.length === 0) return;
+
+  if (state === 'SNAP_WINDOW') {
+    // Valid snap
+    clearTimeout(aiSnapTimer);
+    clearTimeout(noSnapTimer);
+    snapStreak++;
+    renderStreak();
+    awardPile(player);
+    renderSnapCounters(player);
+    setStatus(`You called SNAP and won the pile! 🎉 (streak: ${snapStreak})`);
+    currentTurn = 'player';
+    transition('PLAYER_TURN');
+  } else {
+    // False snap — CPU wins the pile, CPU goes next
+    clearTimeout(aiFlipTimer);
+    clearTimeout(aiSnapTimer);
+    clearTimeout(noSnapTimer);
+    snapStreak = 0;
+    renderStreak();
+    const lost = pile.length;
+    awardPile(ai);
+    renderSnapCounters(ai);
+    setStatus(`False snap! 😬 CPU wins the pile of ${lost} card${lost !== 1 ? 's' : ''}.`);
+    currentTurn = 'ai';
+    transition('PLAYER_TURN');
+  }
 }
 
 function doAiSnap() {
@@ -170,12 +193,25 @@ function doAiSnap() {
   transition('PLAYER_TURN');
 }
 
+function doCpuFalseSnap() {
+  // Guard: state may have changed (e.g. player snapped first)
+  if (state !== 'PLAYER_TURN' && state !== 'AWAITING_AI') return;
+  snapStreak = 0;
+  renderStreak();
+  const won = pile.length;
+  awardPile(player);
+  renderSnapCounters(player);
+  setStatus(`CPU called false snap! 🤖😬 You win the pile of ${won} card${won !== 1 ? 's' : ''}.`);
+  currentTurn = 'player';
+  transition('PLAYER_TURN');
+}
+
 function noSnap() {
   if (state !== 'SNAP_WINDOW') return;
   clearTimeout(aiSnapTimer);
   snapStreak = 0;
   renderStreak();
-  btnSnap.hidden = true;
+  btnSnap.classList.remove('snap-active');
   setStatus("No snap called — pile stays. Next player's turn.");
   currentTurn = currentTurn === 'player' ? 'ai' : 'player';
   transition('PLAYER_TURN');
@@ -214,6 +250,11 @@ function renderPile() {
   renderCard(elCpuCard,    cpuLastCard);
   renderCard(elPlayerCard, playerLastCard);
   elPileCount.textContent = `Pile: ${pile.length} card${pile.length !== 1 ? 's' : ''}`;
+  updateSnapBtn();
+}
+
+function updateSnapBtn() {
+  btnSnap.hidden = state === 'GAME_OVER' || pile.length === 0;
 }
 
 function renderCounts() {
@@ -300,7 +341,7 @@ document.addEventListener('keydown', (e) => {
     doPlayerFlip();
   } else if (e.code === 'Enter') {
     e.preventDefault();
-    if (!btnSnap.hidden) doPlayerSnap();
+    doPlayerSnap();
   }
 });
 
