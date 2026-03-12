@@ -10,6 +10,11 @@
 
 <div id="app">
 
+  <!-- ── Challenge banner (shown when opening a shared link) ── -->
+  <div id="challenge-banner" class="hidden">
+    <span id="challenge-text"></span>
+  </div>
+
   <!-- ── Level progress bar ── -->
   <div id="level-progress">
     <div id="level-progress-track">
@@ -106,7 +111,11 @@
     <h2 id="overlay-title"></h2>
     <p  id="overlay-body"></p>
     <p  id="overlay-level" class="hidden"></p>
-    <button id="btn-play-again">Play Again</button>
+    <div id="overlay-actions">
+      <button id="btn-share">Share result 🔗</button>
+      <button id="btn-play-again">Play Again</button>
+    </div>
+    <p id="share-confirm" class="hidden">Copied to clipboard!</p>
   </div>
 </div>
 
