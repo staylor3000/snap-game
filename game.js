@@ -10,6 +10,7 @@ const btnSnap        = document.getElementById('btn-snap');
 const elOverlay      = document.getElementById('overlay');
 const elOverTitle    = document.getElementById('overlay-title');
 const elOverBody     = document.getElementById('overlay-body');
+const elOverLevel    = document.getElementById('overlay-level');
 const btnPlayAgain   = document.getElementById('btn-play-again');
 const elAiDeck       = document.getElementById('ai-deck-visual');
 const elPlayerDeck   = document.getElementById('player-deck-visual');
@@ -20,13 +21,31 @@ const elStreakCount       = document.getElementById('streak-count');
 const elStreakFire        = document.getElementById('streak-fire');
 const elCpuSnapCount     = document.getElementById('cpu-snap-count');
 const elPlayerSnapCount  = document.getElementById('player-snap-count');
+const elLevelNum         = document.getElementById('level-num');
+const elSnapStats        = document.getElementById('snap-stats');
+const elStatLast         = document.getElementById('stat-last');
+const elStatBest         = document.getElementById('stat-best');
+
+// ── Persistence ───────────────────────────────────────────────────────────────
+let level    = Math.min(100, Math.max(1, parseInt(localStorage.getItem('snap-level') || '1', 10)));
+let bestSnap = parseFloat(localStorage.getItem('snap-best') || 'Infinity');
+
+function saveLevel() { localStorage.setItem('snap-level', level); }
+function saveBest()  { localStorage.setItem('snap-best',  bestSnap); }
 
 // ── State ─────────────────────────────────────────────────────────────────────
 let player, ai, pile, state, currentTurn;
 let aiFlipTimer, aiSnapTimer, noSnapTimer;
 let snapStreak = 0;
+let snapWindowOpenTime = 0;
 
 const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+
+// CPU snap speed scales with level: slow at 1, fast at 100
+function getCpuSnapRange() {
+  const t = (level - 1) / 99;
+  return [Math.round(700 - 550 * t), Math.round(2200 - 1600 * t)];
+}
 
 // ── Initialise ────────────────────────────────────────────────────────────────
 function initGame() {
@@ -48,6 +67,8 @@ function initGame() {
   snapStreak  = 0;
   elOverlay.hidden = true;
 
+  renderLevel();
+  renderSnapStats();
   renderCounts();
   renderPile();
   renderStreak();
@@ -70,7 +91,7 @@ function transition(newState) {
 
       if (currentTurn === 'ai') {
         btnFlip.disabled = true;
-        aiFlipTimer = setTimeout(doAiFlip, rand(1500, 2500));
+        aiFlipTimer = setTimeout(doAiFlip, rand(800, 1200));
       }
       break;
 
@@ -78,16 +99,16 @@ function transition(newState) {
       btnFlip.disabled = true;
       btnSnap.classList.remove('snap-active');
       setStatus("CPU is thinking…");
-      aiFlipTimer = setTimeout(doAiFlip, rand(1500, 2500));
+      aiFlipTimer = setTimeout(doAiFlip, rand(800, 1200));
       break;
 
     case 'SNAP_WINDOW':
       btnFlip.disabled = true;
       btnSnap.classList.add('snap-active');
+      snapWindowOpenTime = Date.now();
       setStatus(`⚡ SNAP! Both cards are ${pile[pile.length - 1].value}s — call it! [Enter]`);
-      // AI races to snap
-      aiSnapTimer = setTimeout(doAiSnap, rand(700, 2200));
-      // Safety timeout: close window if nobody snaps
+      const [cpuMin, cpuMax] = getCpuSnapRange();
+      aiSnapTimer = setTimeout(doAiSnap, rand(cpuMin, cpuMax));
       noSnapTimer = setTimeout(noSnap, 4000);
       break;
 
@@ -103,6 +124,16 @@ function transition(newState) {
       elOverBody.textContent  =
         `Final cards — You: ${player.cardCount} | CPU: ${ai.cardCount}  ` +
         `Piles won — You: ${player.score} | CPU: ${ai.score}`;
+
+      if (won && level < 100) {
+        level++;
+        saveLevel();
+        elOverLevel.textContent = `⬆️ Level up! You're now level ${level}`;
+        elOverLevel.classList.remove('hidden');
+      } else {
+        elOverLevel.classList.add('hidden');
+      }
+
       elOverlay.hidden = false;
       break;
     }
@@ -130,7 +161,6 @@ function doAiFlip() {
   renderPile();
   renderCounts();
   if (checkSnap()) { transition('SNAP_WINDOW'); return; }
-  // Small chance CPU false-snaps
   if (pile.length > 1 && Math.random() < 0.08) {
     setTimeout(doCpuFalseSnap, rand(300, 800));
     return;
@@ -149,9 +179,14 @@ function doPlayerSnap() {
   if (state === 'GAME_OVER' || pile.length === 0) return;
 
   if (state === 'SNAP_WINDOW') {
-    // Valid snap
     clearTimeout(aiSnapTimer);
     clearTimeout(noSnapTimer);
+
+    // Record snap response time
+    const elapsed = (Date.now() - snapWindowOpenTime) / 1000;
+    if (elapsed < bestSnap) { bestSnap = elapsed; saveBest(); }
+    renderSnapStats(elapsed);
+
     snapStreak++;
     renderStreak();
     awardPile(player);
@@ -160,7 +195,6 @@ function doPlayerSnap() {
     currentTurn = 'player';
     transition('PLAYER_TURN');
   } else {
-    // False snap — CPU wins the pile, CPU goes next
     clearTimeout(aiFlipTimer);
     clearTimeout(aiSnapTimer);
     clearTimeout(noSnapTimer);
@@ -252,29 +286,34 @@ function updateSnapBtn() {
   btnSnap.hidden = state === 'GAME_OVER' || pile.length === 0;
 }
 
+function renderLevel() {
+  elLevelNum.textContent = level;
+}
+
+function renderSnapStats(lastMs = null) {
+  if (lastMs === null && !isFinite(bestSnap)) return;
+  elSnapStats.classList.remove('hidden');
+  if (lastMs !== null) elStatLast.textContent = `⚡ Last: ${lastMs.toFixed(2)}s`;
+  elStatBest.textContent = isFinite(bestSnap) ? `🏆 Best: ${bestSnap.toFixed(2)}s` : `🏆 Best: —`;
+}
+
 function renderCounts() {
   elPlayerCount.textContent = player.cardCount;
   elAiCount.textContent     = ai.cardCount;
-
   updateStack(elPlayerDeck, player.cardCount);
   updateStack(elAiDeck,     ai.cardCount);
-
   setBar(elPlayerBar, player.cardCount / 52);
   setBar(elCpuBar,    ai.cardCount     / 52);
 }
 
 function updateStack(containerEl, count) {
   const card = containerEl.querySelector('.stack-card');
-  if (count === 0) {
-    card.classList.add('empty');
-    return;
-  }
+  if (count === 0) { card.classList.add('empty'); return; }
   card.classList.remove('empty');
   const layers = Math.max(1, Math.round((count / 52) * 12));
   const shadows = [];
   for (let i = 1; i <= layers; i++) {
-    const offset = i * 2;
-    shadows.push(`${offset}px ${offset}px 0 #6a1b9a`);
+    shadows.push(`${i * 2}px ${i * 2}px 0 #6a1b9a`);
   }
   card.style.boxShadow = shadows.join(', ');
 }
@@ -288,10 +327,7 @@ function setBar(el, ratio) {
 }
 
 function renderStreak() {
-  if (snapStreak === 0) {
-    elStreakBox.classList.add('hidden');
-    return;
-  }
+  if (snapStreak === 0) { elStreakBox.classList.add('hidden'); return; }
   elStreakBox.classList.remove('hidden');
   elStreakCount.textContent = `×${snapStreak}`;
   elStreakFire.textContent = snapStreak >= 5 ? '🔥🔥🔥' : snapStreak >= 3 ? '🔥🔥' : '🔥';
@@ -313,9 +349,7 @@ function bumpCounter(el) {
   el.classList.add('pop');
 }
 
-function setStatus(msg) {
-  elStatus.textContent = msg;
-}
+function setStatus(msg) { elStatus.textContent = msg; }
 
 // ── Event listeners ───────────────────────────────────────────────────────────
 btnFlip.addEventListener('click', doPlayerFlip);
