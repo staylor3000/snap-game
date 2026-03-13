@@ -11,12 +11,9 @@ const elStatus       = document.getElementById('status-msg');
 const btnFlip        = document.getElementById('btn-flip');
 const btnSnap        = document.getElementById('btn-snap');
 const elOverlay      = document.getElementById('overlay');
-const elOverTitle    = document.getElementById('overlay-title');
-const elOverBody     = document.getElementById('overlay-body');
-const elOverLevel    = document.getElementById('overlay-level');
-const btnShare       = document.getElementById('btn-share');
-const elShareConfirm = document.getElementById('share-confirm');
 const btnPlayAgain   = document.getElementById('btn-play-again');
+const btnCopy        = document.getElementById('btn-copy');
+const btnNextLevel   = document.getElementById('btn-next-level');
 const elChallengeBanner = document.getElementById('challenge-banner');
 const elChallengeText   = document.getElementById('challenge-text');
 const elAiDeck       = document.getElementById('ai-deck-visual');
@@ -59,6 +56,9 @@ let snapStreak = 0;
 let snapWindowOpenTime = 0;
 let lastSnapTime = null;
 let gameBestSnap     = Infinity;
+let totalFlips       = 0;
+let gameSetNewBest   = false;
+let wonGame          = false;
 let playerSnapHits   = 0;
 let playerSnapMisses = 0;
 
@@ -105,6 +105,9 @@ function initGame() {
   gameBestSnap     = Infinity;
   playerSnapHits   = 0;
   playerSnapMisses = 0;
+  totalFlips       = 0;
+  gameSetNewBest   = false;
+  wonGame          = false;
   elOverlay.hidden = true;
 
   renderLevel();
@@ -160,20 +163,8 @@ function transition(newState) {
       clearTimeout(aiSnapTimer);
       clearTimeout(noSnapTimer);
       const won = player.cardCount >= ai.cardCount;
-      elOverTitle.textContent = won ? '🏆 You Win!' : '💻 CPU Wins!';
-      elOverBody.textContent  =
-        `Final cards — You: ${player.cardCount} | CPU: ${ai.cardCount}  ` +
-        `Piles won — You: ${player.score} | CPU: ${ai.score}`;
-
-      if (won && level < 10) {
-        level++;
-        elOverLevel.textContent = `⬆️ Level up! You're now level ${level}`;
-        elOverLevel.classList.remove('hidden');
-      } else {
-        elOverLevel.classList.add('hidden');
-      }
-
-      elOverlay.hidden = false;
+      wonGame = won;
+      showGameOverModal(won);
       break;
     }
   }
@@ -186,6 +177,7 @@ function doPlayerFlip() {
   btnFlip.disabled = true;
   const card = player.flip();
   if (!card) { transition('GAME_OVER'); return; }
+  totalFlips++;
   pile.push(card);
   renderPile();
   renderCounts();
@@ -197,6 +189,7 @@ function doPlayerFlip() {
 function doAiFlip() {
   if (!ai.hasCards()) { transition('GAME_OVER'); return; }
   const card = ai.flip();
+  totalFlips++;
   pile.push(card);
   renderPile();
   renderCounts();
@@ -224,7 +217,7 @@ function doPlayerSnap() {
     showSnapFlash('snap', elYouLabel);
 
     const elapsed = (Date.now() - snapWindowOpenTime) / 1000;
-    if (elapsed < bestSnap)    { bestSnap = elapsed; saveBest(); }
+    if (elapsed < bestSnap)    { gameSetNewBest = true; bestSnap = elapsed; saveBest(); }
     if (elapsed < gameBestSnap)    { gameBestSnap    = elapsed; }
     if (elapsed < sessionBestSnap) { sessionBestSnap = elapsed; }
     lastSnapTime = elapsed;
@@ -479,22 +472,101 @@ function renderTurnIndicator() {
   elCpuTurnTag.textContent  = cpuTurn    ? '▶ YOUR TURN' : '';
 }
 
-// ── Share ──────────────────────────────────────────────────────────────────────
-function buildShareUrl() {
-  const params = new URLSearchParams({ piles: player.score, level });
-  if (isFinite(gameBestSnap)) params.set('best', gameBestSnap.toFixed(2));
-  const base = window.location.href.split('?')[0];
-  return `${base}?${params}`;
+// ── Game-over modal ────────────────────────────────────────────────────────────
+function showGameOverModal(won) {
+  const header = document.getElementById('modal-header');
+  header.style.background = won
+    ? 'linear-gradient(135deg, #FF6B8A, #FFD166)'
+    : 'linear-gradient(135deg, #6B35A3, #9B59B6)';
+
+  const emojiEl = document.getElementById('modal-emoji');
+  emojiEl.textContent = won ? '🏆' : '😅';
+  emojiEl.style.animation = 'none';
+  void emojiEl.offsetWidth;
+  emojiEl.style.animation = '';
+
+  document.getElementById('modal-title').textContent    = won ? 'You Won!'  : 'So Close!';
+  document.getElementById('modal-subtitle').textContent = won
+    ? 'The CPU never stood a chance 😎'
+    : 'The CPU got you this time...';
+
+  // Confetti (win only)
+  const confettiContainer = document.getElementById('confetti-container');
+  confettiContainer.innerHTML = '';
+  if (won) launchConfetti(confettiContainer);
+
+  // Stats pills
+  const bestTimeStr = isFinite(gameBestSnap) ? `${gameBestSnap.toFixed(2)}s` : '—';
+  document.getElementById('modal-stats').innerHTML = `
+    <div class="stat-pill"><span class="stat-pill-value">${playerSnapHits}</span>snaps</div>
+    <div class="stat-pill"><span class="stat-pill-value">${totalFlips}</span>cards</div>
+    <div class="stat-pill"><span class="stat-pill-value">⚡ ${bestTimeStr}</span>best time</div>
+  `;
+
+  // New best badge (win + new record only)
+  const badge = document.getElementById('modal-best-badge');
+  badge.classList.toggle('hidden', !(won && gameSetNewBest));
+
+  // Level row
+  document.getElementById('modal-level-label').textContent = `Level ${level}`;
+  const track = document.getElementById('modal-level-track');
+  const fill  = document.getElementById('modal-level-fill');
+  track.className = won ? 'win' : 'lose';
+  fill.className  = won ? 'win' : 'lose';
+  fill.style.width = `${level * 10}%`;
+
+  // Share text
+  const shareText = won
+    ? `I beat the CPU at Snap with ${playerSnapHits} snaps in ${totalFlips} cards ⚡ Can you do it faster? playsnap.net`
+    : `The CPU beat me at Snap — think you can do better? 😤 playsnap.net`;
+  document.getElementById('modal-share-text').textContent = shareText;
+
+  // Copy button
+  btnCopy.textContent = won ? '📋 Copy & Share' : '📋 Challenge a Friend';
+
+  // Play again / Rematch button
+  if (won) {
+    btnPlayAgain.textContent = 'Play Again 🃏';
+    btnPlayAgain.className   = 'modal-btn modal-btn-purple';
+  } else {
+    btnPlayAgain.textContent = 'Rematch! 🔥';
+    btnPlayAgain.className   = 'modal-btn modal-btn-coral modal-btn-pulse';
+  }
+
+  // Next level button (win only, not at max)
+  if (won && level < 10) {
+    btnNextLevel.textContent = 'Next Level →';
+    btnNextLevel.classList.remove('hidden');
+  } else {
+    btnNextLevel.classList.add('hidden');
+  }
+
+  // Pop-in animation
+  const modal = document.getElementById('modal');
+  modal.classList.remove('modal-pop');
+  void modal.offsetWidth;
+  modal.classList.add('modal-pop');
+
+  elOverlay.hidden = false;
 }
 
-function doShare() {
-  const url  = buildShareUrl();
-  const best = isFinite(gameBestSnap) ? ` with a best snap of ${gameBestSnap.toFixed(2)}s` : '';
-  const text = `I beat the CPU at Snap! 🃏 Won ${player.score} pile${player.score !== 1 ? 's' : ''} at level ${level}${best}. Think you can beat me? ${url}`;
-  navigator.clipboard.writeText(text).then(() => {
-    elShareConfirm.classList.remove('hidden');
-    setTimeout(() => elShareConfirm.classList.add('hidden'), 2500);
-  });
+function launchConfetti(container) {
+  const colors = ['#FF6B8A', '#FFD166', '#7DD4C0', '#6B35A3', '#fff', '#FF8FA3'];
+  for (let i = 0; i < 28; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    const size = 6 + Math.random() * 6;
+    piece.style.cssText = `
+      left: ${Math.random() * 100}%;
+      width: ${size}px;
+      height: ${size}px;
+      background: ${colors[Math.floor(Math.random() * colors.length)]};
+      border-radius: ${Math.random() > 0.5 ? '50%' : '2px'};
+      animation-delay: ${(Math.random() * 1.2).toFixed(2)}s;
+      animation-duration: ${(1.4 + Math.random() * 0.8).toFixed(2)}s;
+    `;
+    container.appendChild(piece);
+  }
 }
 
 // ── Challenge banner on load ───────────────────────────────────────────────────
@@ -514,8 +586,19 @@ function checkChallengeBanner() {
 // ── Event listeners ───────────────────────────────────────────────────────────
 btnFlip.addEventListener('click', doPlayerFlip);
 btnSnap.addEventListener('click', doPlayerSnap);
-btnShare.addEventListener('click', doShare);
 btnPlayAgain.addEventListener('click', initGame);
+btnNextLevel.addEventListener('click', () => {
+  if (wonGame && level < 10) level++;
+  initGame();
+});
+btnCopy.addEventListener('click', () => {
+  const text = document.getElementById('modal-share-text').textContent;
+  const orig = btnCopy.textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    btnCopy.textContent = '✅ Copied!';
+    setTimeout(() => { btnCopy.textContent = orig; }, 2000);
+  });
+});
 
 document.addEventListener('keydown', (e) => {
   if (e.repeat) return;

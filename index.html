@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" />
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1852825669034773"
        crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="style.css?v=018" />
+  <link rel="stylesheet" href="style.css?v=021" />
 </head>
 <body>
 
@@ -122,23 +122,40 @@
 <!-- Snap flash (fixed, full-screen centre) -->
 <div id="snap-flash"></div>
 
-<!-- Game-over overlay -->
+<!-- Game-over modal -->
 <div id="overlay" hidden>
-  <div id="overlay-content">
-    <h2 id="overlay-title"></h2>
-    <p  id="overlay-body"></p>
-    <p  id="overlay-level" class="hidden"></p>
-    <div id="overlay-actions">
-      <button id="btn-share">Share result 🔗</button>
-      <button id="btn-play-again">Play Again</button>
+  <div id="modal">
+    <div id="modal-header">
+      <div id="confetti-container"></div>
+      <div id="modal-emoji"></div>
+      <h2 id="modal-title"></h2>
+      <p id="modal-subtitle"></p>
     </div>
-    <p id="share-confirm" class="hidden">Copied to clipboard!</p>
+    <div id="modal-body">
+      <div id="modal-stats"></div>
+      <div id="modal-best-badge" class="hidden">⚡ New best snap time!</div>
+      <div id="modal-level-row">
+        <span id="modal-level-label"></span>
+        <div id="modal-level-track"><div id="modal-level-fill"></div></div>
+        <span class="modal-level-max">/ 10</span>
+      </div>
+      <div id="modal-share-box">
+        <p id="modal-share-text"></p>
+      </div>
+      <div id="modal-actions">
+        <button id="btn-copy" class="modal-btn modal-btn-outline"></button>
+        <div id="modal-game-btns">
+          <button id="btn-play-again" class="modal-btn"></button>
+          <button id="btn-next-level" class="modal-btn modal-btn-ghost hidden"></button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
 <script src="deck.js?v=013"></script>
 <script src="player.js?v=013"></script>
-<script src="game.js?v=020"></script>
+<script src="game.js?v=021"></script>
 
 </body>
 </html>
