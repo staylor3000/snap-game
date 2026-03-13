@@ -1,3 +1,16 @@
+/* ── CSS Variables ─────────────────────────────────────────────────────────── */
+:root {
+  --cream: #FFF8F0;
+  --coral: #FF6B8A;
+  --coral-light: #FFE8ED;
+  --mint: #7DD4C0;
+  --mint-light: #E8F9F6;
+  --purple: #6B35A3;
+  --purple-light: #F0E8FA;
+  --charcoal: #2D2D2D;
+  --yellow: #FFD166;
+}
+
 /* ── Reset & base ─────────────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -6,9 +19,12 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #ffffff;
-  font-family: 'Georgia', serif;
-  color: #3b1f4e;
+  background: var(--cream);
+  background-image:
+    radial-gradient(circle at 20% 20%, #FFE8ED 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, #E8F9F6 0%, transparent 50%);
+  font-family: 'Nunito', sans-serif;
+  color: var(--charcoal);
 }
 
 /* ── App shell ────────────────────────────────────────────────────────────── */
@@ -19,17 +35,21 @@ body {
   gap: 0;
   width: min(480px, 100vw);
   padding: 16px;
+  background: #ffffff;
+  border-radius: 24px;
+  border: 2px solid var(--purple-light);
+  box-shadow: 0 4px 32px rgba(107, 53, 163, 0.12);
 }
 
 /* ── Challenge banner ────────────────────────────────────────────────────── */
 #challenge-banner {
   width: 100%;
-  background: linear-gradient(135deg, #4a148c, #7b1fa2);
+  background: linear-gradient(135deg, var(--purple), #8B45D3);
   color: #fff;
   border-radius: 10px;
   padding: 8px 14px;
   font-size: 0.78rem;
-  font-weight: bold;
+  font-family: 'Fredoka One', cursive;
   letter-spacing: 0.03em;
   text-align: center;
   margin-bottom: 6px;
@@ -46,26 +66,26 @@ body {
 #level-progress-track {
   width: 100%;
   height: 10px;
-  background: rgba(180, 120, 210, 0.25);
+  background: var(--purple-light);
   border-radius: 5px;
-  border: 1px solid rgba(180, 100, 220, 0.35);
+  border: 1px solid rgba(107, 53, 163, 0.2);
   overflow: hidden;
-  box-shadow: inset 0 1px 4px rgba(100, 0, 120, 0.15);
+  box-shadow: inset 0 1px 4px rgba(107, 53, 163, 0.1);
 }
 
 #level-progress-fill {
   height: 100%;
   width: 1%;
-  background: linear-gradient(90deg, #ab47bc, #e91e8c);
+  background: linear-gradient(90deg, var(--purple), #8B45D3);
   border-radius: 5px;
   transition: width 0.5s ease;
 }
 
 #level-progress-label {
   font-size: 0.62rem;
-  font-weight: bold;
+  font-family: 'Fredoka One', cursive;
   letter-spacing: 0.08em;
-  color: #9c27b0;
+  color: var(--purple);
   text-align: center;
   margin-top: 3px;
 }
@@ -91,17 +111,17 @@ body {
 
 .hud-name {
   font-size: 0.7rem;
-  font-weight: bold;
+  font-family: 'Fredoka One', cursive;
   letter-spacing: 0.08em;
-  color: #7b3fa0;
+  color: var(--charcoal);
   white-space: nowrap;
   min-width: 26px;
 }
 
 .hud-cards {
   font-size: 0.75rem;
-  font-weight: bold;
-  color: #5c1f7a;
+  font-weight: 700;
+  color: var(--charcoal);
   min-width: 18px;
   text-align: center;
 }
@@ -109,11 +129,11 @@ body {
 .health-track {
   flex: 1;
   height: 18px;
-  background: rgba(180, 120, 210, 0.25);
+  background: var(--purple-light);
   border-radius: 3px;
-  border: 1px solid rgba(180, 100, 220, 0.35);
+  border: 1px solid rgba(107, 53, 163, 0.2);
   overflow: hidden;
-  box-shadow: inset 0 1px 4px rgba(100, 0, 120, 0.15);
+  box-shadow: inset 0 1px 4px rgba(107, 53, 163, 0.1);
 }
 
 /* CPU bar grows left-to-right from the left edge */
@@ -124,10 +144,12 @@ body {
 .health-fill {
   height: 100%;
   width: 50%;
-  background: linear-gradient(90deg, #ab47bc, #ce93d8);
   border-radius: 3px;
   transition: width 0.4s ease, background 0.4s ease;
 }
+
+#cpu-bar    { background: linear-gradient(90deg, var(--coral), #FF8FA3); }
+#player-bar { background: linear-gradient(90deg, var(--mint), #5BC4AE); }
 
 /* ── HUD centre (VS + streak) ─────────────────────────────────────────────── */
 #hud-center {
@@ -140,10 +162,10 @@ body {
 
 #hud-vs {
   font-size: 0.8rem;
-  font-weight: bold;
-  color: #9c27b0;
+  font-family: 'Fredoka One', cursive;
+  color: var(--purple);
   letter-spacing: 0.1em;
-  text-shadow: 0 1px 3px rgba(156, 39, 176, 0.3);
+  text-shadow: 0 1px 3px rgba(107, 53, 163, 0.2);
 }
 
 #snap-streak {
@@ -151,10 +173,10 @@ body {
   align-items: center;
   gap: 2px;
   font-size: 0.75rem;
-  font-weight: bold;
-  color: #fff;
-  background: linear-gradient(135deg, #e91e8c, #9c27b0);
-  border-radius: 10px;
+  font-family: 'Fredoka One', cursive;
+  color: var(--charcoal);
+  background: var(--yellow);
+  border-radius: 20px;
   padding: 1px 7px;
   white-space: nowrap;
 }
@@ -169,12 +191,12 @@ body {
 
 #level-badge {
   font-size: 0.65rem;
-  font-weight: bold;
+  font-family: 'Fredoka One', cursive;
   letter-spacing: 0.1em;
   color: #fff;
-  background: linear-gradient(135deg, #7b1fa2, #4a148c);
-  border-radius: 8px;
-  padding: 1px 6px;
+  background: var(--purple);
+  border-radius: 20px;
+  padding: 1px 8px;
 }
 #level-badge #level-num { font-size: 0.75rem; }
 
@@ -194,23 +216,31 @@ body {
 
 .snap-counter-label {
   font-size: 0.7rem;
-  font-weight: bold;
+  font-family: 'Fredoka One', cursive;
   letter-spacing: 0.06em;
-  color: #9c27b0;
+  color: #999;
   text-transform: uppercase;
 }
 
 .snap-counter-value {
   font-size: 1.1rem;
-  font-weight: bold;
+  font-family: 'Fredoka One', cursive;
   color: #fff;
-  background: linear-gradient(135deg, #e91e8c, #9c27b0);
   border-radius: 20px;
   min-width: 28px;
   text-align: center;
   padding: 1px 8px;
   transition: transform 0.15s;
-  box-shadow: 0 2px 8px rgba(156, 39, 176, 0.3);
+}
+
+#cpu-snap-counter .snap-counter-value {
+  background: var(--coral);
+  box-shadow: 0 2px 8px rgba(255, 107, 138, 0.3);
+}
+
+#player-snap-counter .snap-counter-value {
+  background: var(--mint);
+  box-shadow: 0 2px 8px rgba(125, 212, 192, 0.3);
 }
 
 @keyframes counter-pop {
@@ -223,10 +253,10 @@ body {
 /* ── Table surface ────────────────────────────────────────────────────────── */
 #table {
   width: 100%;
-  background: linear-gradient(135deg, #f8e8ff 0%, #fce4f4 40%, #ede0ff 100%);
-  border: 10px solid #ce93d8;
+  background: #ffffff;
+  border: 2px solid var(--purple-light);
   border-radius: 24px;
-  box-shadow: 0 0 0 4px #f48fb1, 0 8px 32px rgba(156, 39, 176, 0.35), inset 0 0 50px rgba(200,100,220,0.08);
+  box-shadow: 0 4px 24px rgba(107, 53, 163, 0.1);
   padding: 16px;
   display: grid;
   grid-template-columns: 1fr auto 1fr;
@@ -247,23 +277,24 @@ body {
 
 .player-label {
   font-size: 0.85rem;
+  font-family: 'Fredoka One', cursive;
   letter-spacing: 0.06em;
-  color: #7b1fa2;
+  color: #999;
   white-space: nowrap;
 }
 .player-label strong {
   display: block;
   font-size: 1rem;
-  color: #4a148c;
+  color: var(--charcoal);
 }
 
 .turn-tag {
   display: block;
   font-size: 0.55rem;
-  font-weight: bold;
+  font-family: 'Fredoka One', cursive;
   letter-spacing: 0.07em;
   color: #fff;
-  background: linear-gradient(135deg, #e91e8c, #9c27b0);
+  background: linear-gradient(135deg, var(--coral), #FF8FA3);
   border-radius: 5px;
   padding: 1px 5px;
   margin-top: 3px;
@@ -285,7 +316,6 @@ body {
 
 /* Card stack visualisation */
 .card-stack {
-  /* Padding lets the box-shadow stack be visible without clipping */
   padding: 0 22px 22px 0;
   flex-shrink: 0;
 }
@@ -294,12 +324,14 @@ body {
   width: 62px;
   height: 88px;
   border-radius: 6px;
-  background: repeating-linear-gradient(
-    -45deg,
-    #9c27b0 0px 6px,
-    #7b1fa2 6px 12px
-  );
-  border: 1px solid rgba(255,255,255,0.35);
+  background:
+    repeating-linear-gradient(
+      -45deg,
+      rgba(255, 255, 255, 0.07) 0px 4px,
+      transparent 4px 8px
+    ),
+    linear-gradient(135deg, var(--purple), #8B45D3);
+  border: 1px solid rgba(255, 255, 255, 0.35);
   position: relative;
   transition: box-shadow 0.35s ease, opacity 0.3s ease;
 }
@@ -311,9 +343,9 @@ body {
 
 /* ── Snap stats bubble (in table) ─────────────────────────────────────────── */
 #snap-stats {
-  background: rgba(123, 31, 162, 0.08);
-  border: 1px solid rgba(180, 100, 220, 0.4);
-  border-radius: 8px;
+  background: var(--purple-light);
+  border: 1px solid rgba(107, 53, 163, 0.15);
+  border-radius: 12px;
   padding: 6px 8px;
 }
 
@@ -323,36 +355,37 @@ body {
   grid-template-columns: 2.8rem 1fr 1fr;
   gap: 2px;
   font-size: 0.62rem;
+  font-family: 'Nunito', sans-serif;
   line-height: 1.65;
 }
 
 .stat-col-header {
   font-size: 0.58rem;
-  font-weight: bold;
+  font-weight: 700;
   letter-spacing: 0.06em;
-  color: #ce93d8;
+  color: var(--purple);
   text-align: right;
   text-transform: uppercase;
   padding-bottom: 2px;
-  border-bottom: 1px solid rgba(156, 39, 176, 0.2);
+  border-bottom: 1px solid rgba(107, 53, 163, 0.2);
 }
 
 .stat-divider {
-  border-top: 1px solid rgba(156, 39, 176, 0.25);
+  border-top: 1px solid rgba(107, 53, 163, 0.15);
   margin-top: 2px;
   padding-top: 2px;
 }
 
 .stat-label {
-  font-weight: bold;
+  font-weight: 700;
   letter-spacing: 0.04em;
-  color: #9c27b0;
+  color: #999;
   text-transform: uppercase;
 }
 
 .stat-val {
-  font-weight: bold;
-  color: #4a148c;
+  font-weight: 700;
+  color: var(--charcoal);
   text-align: right;
 }
 
@@ -407,7 +440,7 @@ body {
 
 #pile-count {
   font-size: 0.8rem;
-  color: #9c27b0;
+  color: #999;
   letter-spacing: 0.05em;
   transition: color 0.4s ease, font-size 0.35s ease;
 }
@@ -436,7 +469,7 @@ body {
 
 .flash-label {
   font-size: 2.8rem;
-  font-weight: bold;
+  font-family: 'Fredoka One', cursive;
   letter-spacing: 0.18em;
 }
 
@@ -475,9 +508,9 @@ body {
   width: 72px;
   height: 100px;
   border-radius: 7px;
-  border: 1px solid #e0b0e8;
+  border: 1px solid rgba(107, 53, 163, 0.15);
   background: #fff;
-  box-shadow: 2px 4px 12px rgba(100, 0, 120, 0.3);
+  box-shadow: 2px 4px 12px rgba(107, 53, 163, 0.12);
   position: relative;
   flex-shrink: 0;
 }
@@ -488,8 +521,8 @@ body {
   box-shadow: none;
 }
 
-.card.red   { color: #c2185b; }
-.card.black { color: #4a148c; }
+.card.red   { color: var(--coral); }
+.card.black { color: var(--charcoal); }
 
 .corner {
   position: absolute;
@@ -532,11 +565,12 @@ body {
 
 #status-msg {
   font-size: 0.9rem;
-  color: #7b1fa2;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  color: var(--purple);
   text-align: center;
   min-height: 1.4em;
   letter-spacing: 0.03em;
-  font-weight: bold;
 }
 
 /* ── Footer ───────────────────────────────────────────────────────────────── */
@@ -556,35 +590,44 @@ body {
 }
 #game-footer a:hover { text-decoration: underline; }
 
+/* ── Buttons ──────────────────────────────────────────────────────────────── */
 .action-btn {
   padding: 12px 32px;
   border: none;
   border-radius: 8px;
-  font-family: inherit;
+  font-family: 'Fredoka One', cursive;
   font-size: 1rem;
-  font-weight: bold;
   letter-spacing: 0.06em;
   cursor: pointer;
   transition: transform 0.1s, box-shadow 0.1s, opacity 0.15s;
 }
-.action-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(156,39,176,0.35); }
+.action-btn:hover:not(:disabled) { transform: translateY(-2px); }
 .action-btn:active:not(:disabled) { transform: translateY(0); }
 .action-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
 #btn-flip {
-  background: linear-gradient(135deg, #ab47bc, #7b1fa2);
+  background: linear-gradient(135deg, var(--purple), #8B45D3);
   color: #fff;
   width: 180px;
-  box-shadow: 0 4px 14px rgba(123, 31, 162, 0.4);
+  border-radius: 16px;
+  box-shadow: 0 4px 14px rgba(107, 53, 163, 0.35);
+}
+#btn-flip:hover:not(:disabled) { box-shadow: 0 6px 20px rgba(107, 53, 163, 0.45); }
+
+@keyframes snap-btn-pulse {
+  0%   { box-shadow: 0 4px 16px rgba(255, 107, 138, 0.35); }
+  100% { box-shadow: 0 6px 28px rgba(255, 107, 138, 0.65); }
 }
 
 #btn-snap {
-  background: linear-gradient(135deg, #f06292, #e91e8c);
+  background: linear-gradient(135deg, var(--coral), #FF8FA3);
   color: #fff;
   font-size: 1.3rem;
   width: 200px;
-  box-shadow: 0 0 24px rgba(233, 30, 140, 0.65);
+  border-radius: 16px;
+  animation: snap-btn-pulse 2s ease-in-out infinite alternate;
 }
+
 @keyframes snap-pulse {
   0%   { transform: scale(0.4); opacity: 0; }
   70%  { transform: scale(1.12); }
@@ -596,7 +639,7 @@ body {
 #overlay {
   position: fixed;
   inset: 0;
-  background: rgba(60, 0, 80, 0.7);
+  background: rgba(45, 45, 45, 0.6);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -605,19 +648,19 @@ body {
 #overlay[hidden] { display: none; }
 
 #overlay-content {
-  background: linear-gradient(160deg, #fce4ec, #f3e5f5);
-  border: 2px solid #ce93d8;
-  border-radius: 16px;
+  background: #ffffff;
+  border: 2px solid var(--purple-light);
+  border-radius: 20px;
   padding: 32px 40px;
   text-align: center;
-  box-shadow: 0 8px 40px rgba(156, 39, 176, 0.4);
+  box-shadow: 0 8px 40px rgba(107, 53, 163, 0.2);
   display: flex;
   flex-direction: column;
   gap: 14px;
 }
-#overlay-title { font-size: 2rem; color: #7b1fa2; }
-#overlay-body  { font-size: 0.95rem; color: #5c1f7a; line-height: 1.6; }
-#overlay-level { font-size: 0.9rem; font-weight: bold; color: #9c27b0; }
+#overlay-title { font-size: 2rem; font-family: 'Fredoka One', cursive; color: var(--purple); }
+#overlay-body  { font-size: 0.95rem; color: var(--charcoal); line-height: 1.6; }
+#overlay-level { font-size: 0.9rem; font-weight: 700; color: var(--purple); }
 #overlay-level.hidden { display: none; }
 
 #overlay-actions {
@@ -628,41 +671,39 @@ body {
 }
 
 #btn-share {
-  background: linear-gradient(135deg, #7b1fa2, #4a148c);
+  background: linear-gradient(135deg, var(--purple), #8B45D3);
   color: #fff;
   padding: 12px 24px;
   border: none;
-  border-radius: 8px;
-  font-family: inherit;
+  border-radius: 16px;
+  font-family: 'Fredoka One', cursive;
   font-size: 0.95rem;
-  font-weight: bold;
   cursor: pointer;
   transition: transform 0.1s;
-  box-shadow: 0 4px 14px rgba(74, 20, 140, 0.4);
+  box-shadow: 0 4px 14px rgba(107, 53, 163, 0.3);
 }
 #btn-share:hover { transform: scale(1.04); }
 
 #share-confirm {
   font-size: 0.8rem;
-  color: #7b1fa2;
-  font-weight: bold;
+  font-weight: 700;
+  color: var(--purple);
   letter-spacing: 0.04em;
   margin-top: -6px;
 }
 #share-confirm.hidden { display: none; }
 
 #btn-play-again {
-  background: linear-gradient(135deg, #f06292, #e91e8c);
+  background: linear-gradient(135deg, var(--coral), #FF8FA3);
   color: #fff;
   padding: 12px 36px;
   border: none;
-  border-radius: 8px;
-  font-family: inherit;
+  border-radius: 16px;
+  font-family: 'Fredoka One', cursive;
   font-size: 1rem;
-  font-weight: bold;
   cursor: pointer;
   transition: transform 0.1s;
   margin-top: 4px;
-  box-shadow: 0 4px 14px rgba(233, 30, 140, 0.4);
+  box-shadow: 0 4px 14px rgba(255, 107, 138, 0.35);
 }
 #btn-play-again:hover { transform: scale(1.04); }
