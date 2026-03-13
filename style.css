@@ -574,6 +574,16 @@ body {
   letter-spacing: 0.03em;
 }
 
+#snap-hint {
+  font-size: 0.9rem;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  color: var(--coral);
+  text-align: center;
+  letter-spacing: 0.03em;
+}
+#snap-hint.hidden { display: none; }
+
 /* ── Footer ───────────────────────────────────────────────────────────────── */
 #game-footer {
   width: 100%;
