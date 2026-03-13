@@ -8,6 +8,7 @@ const elPileFace     = document.getElementById('pile-face');
 const elPileCardPrev = document.getElementById('pile-card-prev');
 const elPileCardTop  = document.getElementById('pile-card-top');
 const elStatus       = document.getElementById('status-msg');
+const elSnapHint     = document.getElementById('snap-hint');
 const btnFlip        = document.getElementById('btn-flip');
 const btnSnap        = document.getElementById('btn-snap');
 const elOverlay      = document.getElementById('overlay');
@@ -154,9 +155,7 @@ function transition(newState) {
 
     case 'SNAP_WINDOW':
       btnFlip.disabled = true;
-      btnSnap.classList.add('snap-active');
       snapWindowOpenTime = Date.now();
-      setStatus(`⚡ SNAP! Both cards are ${pile[pile.length - 1].value}s — call it! [Enter]`);
       const [cpuMin, cpuMax] = getCpuSnapRange();
       aiSnapTimer = setTimeout(doAiSnap, rand(cpuMin, cpuMax));
       noSnapTimer = setTimeout(noSnap, 4000);
@@ -164,7 +163,6 @@ function transition(newState) {
 
     case 'GAME_OVER': {
       btnFlip.disabled = true;
-      btnSnap.hidden   = true;
       btnSnap.classList.remove('snap-active');
       clearTimeout(aiFlipTimer);
       clearTimeout(aiSnapTimer);
@@ -391,7 +389,9 @@ function updatePileVisual() {
 }
 
 function updateSnapBtn() {
-  btnSnap.hidden = state === 'GAME_OVER' || pile.length === 0;
+  const visible = state !== 'GAME_OVER' && pile.length > 0;
+  btnSnap.hidden = !visible;
+  elSnapHint.classList.toggle('hidden', !visible);
 }
 
 function renderLevel() {
