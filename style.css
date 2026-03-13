@@ -596,6 +596,23 @@ body {
   text-decoration: none;
 }
 #game-footer a:hover { text-decoration: underline; }
+#btn-footer-share {
+  background: none;
+  border: 1px solid #d8c8e8;
+  border-radius: 999px;
+  color: #a888c8;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 5px 14px;
+  cursor: pointer;
+  margin-bottom: 6px;
+  transition: background 0.15s, color 0.15s;
+}
+#btn-footer-share:hover {
+  background: #f0e8fa;
+  color: var(--purple);
+}
 
 /* ── Buttons ──────────────────────────────────────────────────────────────── */
 .action-btn {
