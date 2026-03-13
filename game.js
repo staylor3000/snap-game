@@ -47,11 +47,10 @@ const elCpuLabel    = document.getElementById('cpu-label');
 const elYouLabel    = document.getElementById('you-label');
 
 // ── Persistence ───────────────────────────────────────────────────────────────
-let level    = Math.min(10, Math.max(1, parseInt(localStorage.getItem('snap-level') || '1', 10)));
+let level    = 1;
 let bestSnap = parseFloat(localStorage.getItem('snap-best') || 'Infinity');
 
-function saveLevel() { localStorage.setItem('snap-level', level); }
-function saveBest()  { localStorage.setItem('snap-best',  bestSnap); }
+function saveBest() { localStorage.setItem('snap-best', bestSnap); }
 
 // ── State ─────────────────────────────────────────────────────────────────────
 let player, ai, pile, state, currentTurn;
@@ -168,7 +167,6 @@ function transition(newState) {
 
       if (won && level < 10) {
         level++;
-        saveLevel();
         elOverLevel.textContent = `⬆️ Level up! You're now level ${level}`;
         elOverLevel.classList.remove('hidden');
       } else {
