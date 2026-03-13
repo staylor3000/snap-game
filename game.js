@@ -70,9 +70,14 @@ let sessionSnapMisses = 0;
 
 const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
-// CPU snap reaction: floor = player's session best (or 0.8s), ceiling shrinks 3% per level
+// CPU snap reaction: floor starts at 1000ms at level 1, tapers to player's best by level 4.
+// Always at least the player's own best, so difficulty scales for all skill levels.
 function getCpuSnapRange() {
-  const floorMs = Math.round((isFinite(sessionBestSnap) ? sessionBestSnap : 0.8) * 1000);
+  const playerBestMs = Math.round((isFinite(sessionBestSnap) ? sessionBestSnap : 0.8) * 1000);
+  const levelFloorMs = level < 4
+    ? Math.round(1000 - (level - 1) * (1000 - playerBestMs) / 3)
+    : playerBestMs;
+  const floorMs = Math.max(playerBestMs, levelFloorMs);
   const upperMult = 1.30 - (level - 1) * 0.03;
   return [floorMs, Math.round(floorMs * upperMult)];
 }
@@ -206,15 +211,13 @@ function doAiFlip() {
 
 // ── Snap logic ────────────────────────────────────────────────────────────────
 function checkSnap() {
-  if (pile.length < 2) return false;
-  const top  = pile[pile.length - 1];
-  const prev = pile[pile.length - 2];
-  return top.value === prev.value || top.value === 'Joker' || prev.value === 'Joker';
+  return pile.length >= 2 &&
+    pile[pile.length - 1].value === pile[pile.length - 2].value;
 }
 
 function getCpuFalseSnapRate() {
-  // 25% at level 1, tapers linearly to 8% at level 6, stays 8% from level 6–10
-  return Math.max(0.08, 0.25 - (level - 1) * 0.034);
+  // 0% at levels 1–3 (player earns wins through skill), 4% from level 4+
+  return level >= 4 ? 0.04 : 0;
 }
 
 function doPlayerSnap() {

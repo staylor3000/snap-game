@@ -523,12 +523,6 @@ body {
 
 .card.red   { color: var(--coral); }
 .card.black { color: var(--charcoal); }
-.card.joker {
-  background: linear-gradient(135deg, #fff9e6, #fff0fa, #e8f9f6);
-  color: var(--purple);
-  border-color: var(--yellow);
-  box-shadow: 0 0 0 2px var(--yellow), 0 2px 8px rgba(107,53,163,0.15);
-}
 .joker-center { font-size: 2.2rem; }
 
 .corner {
