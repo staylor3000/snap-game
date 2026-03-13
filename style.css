@@ -544,15 +544,15 @@ body {
 #game-footer {
   width: 100%;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  gap: 14px;
+  gap: 4px;
   margin-top: 28px;
   font-size: 0.62rem;
   color: #c8b8d8;
 }
 #game-footer a {
-  color: #c8b8d8;
+  color: #a0b8c8;
   text-decoration: none;
 }
 #game-footer a:hover { text-decoration: underline; }
