@@ -47,7 +47,7 @@ const elCpuLabel    = document.getElementById('cpu-label');
 const elYouLabel    = document.getElementById('you-label');
 
 // ── Persistence ───────────────────────────────────────────────────────────────
-let level    = Math.min(100, Math.max(1, parseInt(localStorage.getItem('snap-level') || '1', 10)));
+let level    = Math.min(10, Math.max(1, parseInt(localStorage.getItem('snap-level') || '1', 10)));
 let bestSnap = parseFloat(localStorage.getItem('snap-best') || 'Infinity');
 
 function saveLevel() { localStorage.setItem('snap-level', level); }
@@ -70,10 +70,18 @@ let sessionSnapMisses = 0;
 
 const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
-// CPU snap speed scales with level: slow at 1, fast at 100
+// CPU snap reaction: floor = player's session best (or 0.8s), ceiling shrinks 3% per level
 function getCpuSnapRange() {
-  const t = (level - 1) / 99;
-  return [Math.round(700 - 550 * t), Math.round(2200 - 1600 * t)];
+  const floorMs = Math.round((isFinite(sessionBestSnap) ? sessionBestSnap : 0.8) * 1000);
+  const upperMult = 1.30 - (level - 1) * 0.03;
+  return [floorMs, Math.round(floorMs * upperMult)];
+}
+
+// CPU flip delay: 1200–1600ms at level 1, −100ms per level
+function getCpuFlipDelay() {
+  const lo = Math.max(200, 1200 - (level - 1) * 100);
+  const hi = Math.max(600, 1600 - (level - 1) * 100);
+  return rand(lo, hi);
 }
 
 // ── Initialise ────────────────────────────────────────────────────────────────
@@ -124,7 +132,7 @@ function transition(newState) {
 
       if (currentTurn === 'ai') {
         btnFlip.disabled = true;
-        aiFlipTimer = setTimeout(doAiFlip, rand(800, 1200));
+        aiFlipTimer = setTimeout(doAiFlip, getCpuFlipDelay());
       }
       break;
 
@@ -132,7 +140,7 @@ function transition(newState) {
       btnFlip.disabled = true;
       btnSnap.classList.remove('snap-active');
       setStatus("CPU is thinking…");
-      aiFlipTimer = setTimeout(doAiFlip, rand(800, 1200));
+      aiFlipTimer = setTimeout(doAiFlip, getCpuFlipDelay());
       break;
 
     case 'SNAP_WINDOW':
@@ -158,7 +166,7 @@ function transition(newState) {
         `Final cards — You: ${player.cardCount} | CPU: ${ai.cardCount}  ` +
         `Piles won — You: ${player.score} | CPU: ${ai.score}`;
 
-      if (won && level < 100) {
+      if (won && level < 10) {
         level++;
         saveLevel();
         elOverLevel.textContent = `⬆️ Level up! You're now level ${level}`;
@@ -378,7 +386,7 @@ function updateSnapBtn() {
 function renderLevel() {
   elLevelNum.textContent         = level;
   elLevelProgressNum.textContent = level;
-  elLevelProgressFill.style.width = `${level}%`;
+  elLevelProgressFill.style.width = `${level * 10}%`;
 }
 
 function renderSnapStats() {
