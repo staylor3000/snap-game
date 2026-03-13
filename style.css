@@ -547,12 +547,12 @@ body {
   justify-content: center;
   align-items: center;
   gap: 14px;
-  padding-top: 8px;
-  font-size: 0.72rem;
-  color: #b0a0c0;
+  margin-top: 28px;
+  font-size: 0.62rem;
+  color: #c8b8d8;
 }
 #game-footer a {
-  color: #b0a0c0;
+  color: #c8b8d8;
   text-decoration: none;
 }
 #game-footer a:hover { text-decoration: underline; }
