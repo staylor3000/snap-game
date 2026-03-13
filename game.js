@@ -524,20 +524,15 @@ function showGameOverModal(won) {
   // Copy button
   btnCopy.textContent = won ? '📋 Copy & Share' : '📋 Challenge a Friend';
 
-  // Play again / Rematch button
+  // Win: single "Next Level 🃏" button; Lose: "Rematch! 🔥"
   if (won) {
-    btnPlayAgain.textContent = 'Play Again 🃏';
-    btnPlayAgain.className   = 'modal-btn modal-btn-purple';
+    btnPlayAgain.hidden      = true;
+    btnNextLevel.textContent = 'Next Level 🃏';
+    btnNextLevel.className   = 'modal-btn modal-btn-purple';
   } else {
+    btnPlayAgain.hidden      = false;
     btnPlayAgain.textContent = 'Rematch! 🔥';
     btnPlayAgain.className   = 'modal-btn modal-btn-coral modal-btn-pulse';
-  }
-
-  // Next level button (win only, not at max)
-  if (won && level < 10) {
-    btnNextLevel.textContent = 'Next Level →';
-    btnNextLevel.classList.remove('hidden');
-  } else {
     btnNextLevel.classList.add('hidden');
   }
 
