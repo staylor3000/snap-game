@@ -5,14 +5,23 @@ class Card {
   constructor(suit, value) {
     this.suit = suit;
     this.value = value;
-    this.symbol = { Hearts: '♥', Diamonds: '♦', Clubs: '♣', Spades: '♠' }[suit];
-    this.color = (suit === 'Hearts' || suit === 'Diamonds') ? 'red' : 'black';
+    if (value === 'Joker') {
+      this.symbol = '🃏';
+      this.color  = 'joker';
+    } else {
+      this.symbol = { Hearts: '♥', Diamonds: '♦', Clubs: '♣', Spades: '♠' }[suit];
+      this.color  = (suit === 'Hearts' || suit === 'Diamonds') ? 'red' : 'black';
+    }
   }
 }
 
 class Deck {
-  constructor() {
-    this.cards = SUITS.flatMap(suit => VALUES.map(value => new Card(suit, value)));
+  constructor(numValues = 13) {
+    const values = VALUES.slice(0, numValues);
+    this.cards = SUITS.flatMap(suit => values.map(value => new Card(suit, value)));
+    // Two jokers (wild cards) in every deck
+    this.cards.push(new Card('Joker', 'Joker'));
+    this.cards.push(new Card('Joker', 'Joker'));
   }
 
   shuffle() {

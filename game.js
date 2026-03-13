@@ -93,7 +93,8 @@ function initGame() {
   ai     = new Player('CPU');
   pile   = [];
 
-  const deck = new Deck();
+  const numValues = Math.min(13, 3 + level);
+  const deck = new Deck(numValues);
   deck.shuffle();
   const [h1, h2] = deck.deal(2);
   player.hand = h1;
@@ -194,7 +195,7 @@ function doAiFlip() {
   renderPile();
   renderCounts();
   if (checkSnap()) { transition('SNAP_WINDOW'); return; }
-  if (pile.length > 1 && Math.random() < 0.08) {
+  if (pile.length > 1 && Math.random() < getCpuFalseSnapRate()) {
     setTimeout(doCpuFalseSnap, rand(300, 800));
     return;
   }
@@ -204,8 +205,15 @@ function doAiFlip() {
 
 // ── Snap logic ────────────────────────────────────────────────────────────────
 function checkSnap() {
-  return pile.length >= 2 &&
-    pile[pile.length - 1].value === pile[pile.length - 2].value;
+  if (pile.length < 2) return false;
+  const top  = pile[pile.length - 1];
+  const prev = pile[pile.length - 2];
+  return top.value === prev.value || top.value === 'Joker' || prev.value === 'Joker';
+}
+
+function getCpuFalseSnapRate() {
+  // 25% at level 1, tapers linearly to 8% at level 6, stays 8% from level 6–10
+  return Math.max(0.08, 0.25 - (level - 1) * 0.034);
 }
 
 function doPlayerSnap() {
@@ -305,11 +313,19 @@ function renderCard(el, card, animate = true) {
     return;
   }
   el.className = `card face-up ${card.color}`;
-  el.innerHTML = `
-    <span class="corner top-left">${card.value}<br>${card.symbol}</span>
-    <span class="center-suit">${card.symbol}</span>
-    <span class="corner bottom-right">${card.value}<br>${card.symbol}</span>
-  `;
+  if (card.value === 'Joker') {
+    el.innerHTML = `
+      <span class="corner top-left">🃏</span>
+      <span class="center-suit joker-center">🃏</span>
+      <span class="corner bottom-right">🃏</span>
+    `;
+  } else {
+    el.innerHTML = `
+      <span class="corner top-left">${card.value}<br>${card.symbol}</span>
+      <span class="center-suit">${card.symbol}</span>
+      <span class="corner bottom-right">${card.value}<br>${card.symbol}</span>
+    `;
+  }
   if (animate) {
     el.classList.remove('flip-in');
     void el.offsetWidth;
