@@ -13,7 +13,8 @@ const btnSnap        = document.getElementById('btn-snap');
 const elOverlay      = document.getElementById('overlay');
 const btnPlayAgain   = document.getElementById('btn-play-again');
 const btnCopy        = document.getElementById('btn-copy');
-const btnNextLevel   = document.getElementById('btn-next-level');
+const btnNextLevel      = document.getElementById('btn-next-level');
+const btnFooterShare    = document.getElementById('btn-footer-share');
 const elChallengeBanner = document.getElementById('challenge-banner');
 const elChallengeText   = document.getElementById('challenge-text');
 const elAiDeck       = document.getElementById('ai-deck-visual');
@@ -532,9 +533,10 @@ function showGameOverModal(won) {
   fill.style.width = `${level * 10}%`;
 
   // Share text
+  const bestTimeStr = isFinite(gameBestSnap) ? `${gameBestSnap.toFixed(2)}s` : null;
   const shareText = won
-    ? `I beat the CPU at Snap with ${playerSnapHits} snaps in ${totalFlips} cards ⚡ Can you do it faster? playsnap.net`
-    : `The CPU beat me at Snap — think you can do better? 😤 playsnap.net`;
+    ? `I beat the CPU at Snap with ${playerSnapHits} snaps in ${totalFlips} cards ⚡${bestTimeStr ? ` Best reaction: ${bestTimeStr} —` : ''} Can you do it faster? playsnap.net`
+    : `The CPU beat me at Snap${bestTimeStr ? ` — my best reaction was ${bestTimeStr}` : ''} — think you can do better? 😤 playsnap.net`;
   document.getElementById('modal-share-text').textContent = shareText;
 
   // Copy button
@@ -601,6 +603,14 @@ btnPlayAgain.addEventListener('click', initGame);
 btnNextLevel.addEventListener('click', () => {
   if (wonGame && level < 10) level++;
   initGame();
+});
+btnFooterShare.addEventListener('click', () => {
+  const text = `I'm on level ${level} at PlaySnap — think you can get further? 🃏 playsnap.net`;
+  const orig = btnFooterShare.textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    btnFooterShare.textContent = '✅ Copied!';
+    setTimeout(() => { btnFooterShare.textContent = orig; }, 2000);
+  });
 });
 btnCopy.addEventListener('click', () => {
   const text = document.getElementById('modal-share-text').textContent;
