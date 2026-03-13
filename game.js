@@ -538,7 +538,7 @@ function showGameOverModal(won) {
   // Share text
   const shareTimeStr = isFinite(gameBestSnap) ? `${gameBestSnap.toFixed(2)}s` : null;
   const shareText = won
-    ? `I beat the CPU at Snap with ${playerSnapHits} snaps in ${totalFlips} cards ⚡${shareTimeStr ? ` Best reaction: ${shareTimeStr} —` : ''} Can you do it faster? playsnap.net`
+    ? `${playerSnapHits} snaps in ${totalFlips} cards ⚡${shareTimeStr ? ` ${shareTimeStr} top reaction speed —` : ''} Can you SNAP faster? playsnap.net`
     : `The CPU beat me at Snap${shareTimeStr ? ` — my best reaction was ${shareTimeStr}` : ''} — think you can do better? 😤 playsnap.net`;
   document.getElementById('modal-share-text').textContent = shareText;
 
