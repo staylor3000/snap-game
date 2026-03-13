@@ -337,7 +337,7 @@ function renderPile() {
 function updatePileVisual() {
   const count = pile.length;
 
-  const faces = ['😶', '😬', '😟', '😰', '😨', '😧', '😱', '🤯'];
+  const faces = ['😶', '😯', '😲', '😵‍💫', '😨', '😱', '🤯', '👽'];
   const faceIdx = count === 0 ? 0 : Math.min(Math.floor(count / 4) + 1, faces.length - 1);
   elPileFace.textContent  = faces[faceIdx];
   elPileFace.style.fontSize = `${(7 + Math.min(count / 26, 1) * 2.5).toFixed(2)}rem`;
@@ -463,8 +463,10 @@ function showSnapFlash(type, targetEl) {
   elSnapFlash.style.left = `${rect.left + rect.width / 2}px`;
   elSnapFlash.style.top  = `${rect.top  + rect.height / 2}px`;
   elSnapFlash.className = '';
+  const snapEmojis = ['✨', '⚡️', '🔥'];
+  const snapEmoji  = snapEmojis[Math.floor(Math.random() * snapEmojis.length)];
   elSnapFlash.innerHTML = type === 'snap'
-    ? '<span class="flash-emoji">💥</span><span class="flash-label">SNAP!</span>'
+    ? `<span class="flash-emoji">${snapEmoji}</span><span class="flash-label">SNAP!</span>`
     : '<span class="flash-emoji">❌</span><span class="flash-label">DENIED</span>';
   void elSnapFlash.offsetWidth;
   elSnapFlash.classList.add(type === 'snap' ? 'flash-snap' : 'flash-deny');
