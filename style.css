@@ -540,6 +540,23 @@ body {
   font-weight: bold;
 }
 
+/* ── Footer ───────────────────────────────────────────────────────────────── */
+#game-footer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  padding-top: 8px;
+  font-size: 0.72rem;
+  color: #b0a0c0;
+}
+#game-footer a {
+  color: #b0a0c0;
+  text-decoration: none;
+}
+#game-footer a:hover { text-decoration: underline; }
+
 .action-btn {
   padding: 12px 32px;
   border: none;
