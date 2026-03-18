@@ -410,50 +410,18 @@ body {
   position: relative;
 }
 
-/* Speech bubble for the emoji */
-#pile-face {
+#pile-expression {
   position: absolute;
-  right: calc(100% + 20px);
+  right: calc(100% + 12px);
   top: 50%;
   transform: translateY(-50%);
-  font-size: 7rem;
-  line-height: 1;
+  width: 90px;
+  height: 90px;
+  object-fit: contain;
+  border: none;
   user-select: none;
-  transition: font-size 0.35s ease;
-  background: var(--white);
-  border: 3px solid var(--ink);
-  box-shadow: var(--shadow-sm);
-  padding: 4px 6px;
+  transition: opacity 0.3s ease;
   z-index: 2;
-}
-
-/* Speech bubble tail — black outline */
-#pile-face::after {
-  content: '';
-  position: absolute;
-  right: -20px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 0;
-  height: 0;
-  border-top: 13px solid transparent;
-  border-bottom: 13px solid transparent;
-  border-left: 18px solid var(--ink);
-}
-
-/* Speech bubble tail — white fill */
-#pile-face::before {
-  content: '';
-  position: absolute;
-  right: -13px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 0;
-  height: 0;
-  border-top: 10px solid transparent;
-  border-bottom: 10px solid transparent;
-  border-left: 14px solid var(--white);
-  z-index: 1;
 }
 
 #pile-cards {
