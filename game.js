@@ -358,8 +358,8 @@ function updateExpression(newSrc) {
 function updatePileVisual() {
   const count = pile.length;
 
-  const stage = count === 0 ? 1 : Math.min(Math.ceil(count / 5) + 1, 6);
-  updateExpression(`assets/stage_${stage}.png`);
+  const stage = count === 0 ? 1 : Math.min(Math.ceil(count / 4) + 1, 8);
+  updateExpression(`assets/face_stage_${stage}.png`);
 
   if (count === 0) {
     elPileCards.style.transform = '';
