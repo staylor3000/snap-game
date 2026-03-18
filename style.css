@@ -283,7 +283,7 @@ body {
 #cpu-label          { grid-area: cpu-label; }
 #ai-deck-visual     { grid-area: cpu-deck; }
 #pile-area          { grid-area: pile-area; }
-#snap-stats         { grid-area: snap-stats; align-self: center; position: relative; }
+#snap-stats         { grid-area: snap-stats; align-self: center; }
 #player-deck-visual { grid-area: player-deck; }
 #you-label          { grid-area: you-label; text-align: right; }
 
@@ -412,16 +412,17 @@ body {
 
 #pile-expression {
   position: absolute;
-  right: calc(100% + 10px);
+  right: calc(100% + 12px);
   top: 50%;
   transform: translateY(-50%);
-  width: 80px;
-  height: 80px;
+  width: 90px;
+  height: 90px;
   object-fit: contain;
   border: 3px solid var(--ink);
   box-shadow: var(--shadow-sm);
   user-select: none;
   transition: opacity 0.3s ease;
+  z-index: 2;
 }
 
 #pile-cards {

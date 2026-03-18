@@ -345,11 +345,13 @@ function renderPile() {
   updateSnapBtn();
 }
 
+let expressionFadeTimer = null;
 function updateExpression(newSrc) {
   const img = elPileExpression;
   if (img.src.endsWith(newSrc)) return;
+  clearTimeout(expressionFadeTimer);
   img.style.opacity = '0';
-  setTimeout(() => {
+  expressionFadeTimer = setTimeout(() => {
     img.src = newSrc;
     img.style.opacity = '1';
   }, 150);
@@ -358,7 +360,7 @@ function updateExpression(newSrc) {
 function updatePileVisual() {
   const count = pile.length;
 
-  const stage = count === 0 ? 1 : Math.min(Math.ceil(count / 4) + 1, 8);
+  const stage = count < 4 ? 1 : Math.min(Math.floor((count - 4) / 4) + 2, 8);
   updateExpression(`assets/face_stage_${stage}.png`);
 
   if (count === 0) {
