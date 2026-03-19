@@ -504,16 +504,10 @@ function renderTurnIndicator() {
 
 // ── Game-over modal ────────────────────────────────────────────────────────────
 function showGameOverModal(won) {
-  const header = document.getElementById('modal-header');
-  header.style.background = won
-    ? 'linear-gradient(135deg, #FF6B8A, #FFD166)'
-    : 'linear-gradient(135deg, #6B35A3, #9B59B6)';
-
-  const emojiEl = document.getElementById('modal-emoji');
-  emojiEl.textContent = won ? '🏆' : '😅';
-  emojiEl.style.animation = 'none';
-  void emojiEl.offsetWidth;
-  emojiEl.style.animation = '';
+  const bannerNum = Math.floor(Math.random() * 5) + 1;
+  const bannerEl = document.getElementById('modal-banner');
+  bannerEl.src = won ? `assets/win_banner_${bannerNum}.png` : `assets/lose_banner_${bannerNum}.png`;
+  bannerEl.alt = won ? 'You won!' : 'You lost!';
 
   document.getElementById('modal-title').textContent    = won ? 'You Won!'  : 'So Close!';
   document.getElementById('modal-subtitle').textContent = won
