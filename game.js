@@ -460,7 +460,6 @@ function renderStreak() {
   if (snapStreak === 0) { elStreakBox.classList.add('hidden'); return; }
   elStreakBox.classList.remove('hidden');
   elStreakCount.textContent = `×${snapStreak}`;
-  elStreakFire.textContent = snapStreak >= 5 ? '🔥🔥🔥' : snapStreak >= 3 ? '🔥🔥' : '🔥';
   elStreakBox.classList.remove('streak-pop');
   void elStreakBox.offsetWidth;
   elStreakBox.classList.add('streak-pop');
