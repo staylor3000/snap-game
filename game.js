@@ -346,7 +346,10 @@ function renderPile() {
 }
 
 let expressionFadeTimer = null;
+let zapRevertTimer = null;
+let zapActive = false;
 function updateExpression(newSrc) {
+  if (zapActive) return;
   const img = elPileExpression;
   if (img.src.endsWith(newSrc)) return;
   clearTimeout(expressionFadeTimer);
@@ -375,7 +378,7 @@ function updatePileVisual() {
   const layers = Math.min(count, 12);
   const shadows = [];
   for (let i = 1; i <= layers; i++) {
-    shadows.push(`${i * 2}px ${i * 2}px 0 rgba(106,27,154,0.65)`);
+    shadows.push(`${i * 2}px ${i * 2}px 0 rgba(0,0,0,0.7)`);
   }
   elPileCardPrev.style.boxShadow = shadows.join(', ');
 
@@ -389,12 +392,8 @@ function updatePileVisual() {
   const glowAlpha = (t * 0.7).toFixed(2);
   elPileArea.style.filter = `drop-shadow(0 0 ${glowPx}px rgba(233,30,140,${glowAlpha}))`;
 
-  // Pile count text shifts from muted → alarming
-  const r = Math.round(123 + t * 110);  // 123 → 233
-  const g = Math.round(31  - t * 31);   // 31  → 0
-  const b = Math.round(162 - t * 22);   // 162 → 140
-  elPileCount.style.color    = `rgb(${r},${g},${b})`;
-  elPileCount.style.fontSize = `${(0.8 + t * 0.3).toFixed(2)}rem`;
+  elPileCount.style.color    = 'var(--ink)';
+  elPileCount.style.fontSize = `${(0.95 + t * 0.3).toFixed(2)}rem`;
   elPileCount.style.fontWeight = t > 0.5 ? 'bold' : '';
 }
 
@@ -443,7 +442,7 @@ function updateStack(containerEl, count) {
   const layers = Math.max(1, Math.round((count / 52) * 12));
   const shadows = [];
   for (let i = 1; i <= layers; i++) {
-    shadows.push(`${i * 2}px ${i * 2}px 0 #6a1b9a`);
+    shadows.push(`${i * 2}px ${i * 2}px 0 rgba(0,0,0,0.7)`);
   }
   card.style.boxShadow = shadows.join(', ');
 }
@@ -498,6 +497,21 @@ function showSnapFlash(type, targetEl) {
 
   void elSnapFlash.offsetWidth;
   elSnapFlash.classList.add(type === 'snap' ? 'flash-snap' : 'flash-deny');
+
+  // Swap pile face to zap.png for the duration of the flash
+  clearTimeout(zapRevertTimer);
+  clearTimeout(expressionFadeTimer);
+  zapActive = true;
+  elPileExpression.src = 'assets/zap.png';
+  elPileExpression.style.opacity = '1';
+  elPileExpression.style.background = 'white';
+  zapRevertTimer = setTimeout(() => {
+    zapActive = false;
+    elPileExpression.style.background = '';
+    const count = pile.length;
+    const stage = count < 4 ? 1 : Math.min(Math.floor((count - 4) / 4) + 2, 8);
+    updateExpression(`assets/face_stage_${stage}.png`);
+  }, 1000);
 }
 
 function renderTurnIndicator() {
