@@ -681,7 +681,6 @@ body {
 }
 
 /* ── SNAP! button ─────────────────────────────────────────────────────────── */
-#btn-snap[hidden] { display: none; }
 
 .snap-wrapper {
   display: flex;
@@ -704,6 +703,12 @@ body {
 .snap-wrapper:active {
   transform: translate(3px, 3px);
   box-shadow: none;
+}
+
+.snap-wrapper.snap-inactive {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
 }
 
 .snap-text {

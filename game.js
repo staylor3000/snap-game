@@ -399,9 +399,9 @@ function updatePileVisual() {
 }
 
 function updateSnapBtn() {
-  const visible = state !== 'GAME_OVER' && pile.length > 0;
-  btnSnap.hidden = !visible;
-  elSnapHint.classList.toggle('hidden', !visible);
+  const active = state !== 'GAME_OVER' && pile.length > 0;
+  btnSnap.classList.toggle('snap-inactive', !active);
+  elSnapHint.classList.toggle('hidden', !active);
 }
 
 function renderLevel() {
