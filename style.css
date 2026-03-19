@@ -584,6 +584,17 @@ body {
   padding-top: 8px;
 }
 
+#btn-row {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+}
+
+.kbd-hint { display: none; }
+@media (hover: hover) and (pointer: fine) {
+  .kbd-hint { display: inline; }
+}
+
 #status-msg {
   font-size: 0.9rem;
   font-family: 'Russo One', sans-serif;
@@ -666,7 +677,7 @@ body {
 #btn-flip {
   background: var(--blue);
   color: var(--white);
-  width: 180px;
+  flex: 1;
 }
 
 /* ── SNAP! button ─────────────────────────────────────────────────────────── */
@@ -678,7 +689,7 @@ body {
   justify-content: center;
   cursor: pointer;
   padding: 12px 32px;
-  width: 180px;
+  flex: 1;
   background: #FF3D78;
   border: 3px solid var(--ink);
   box-shadow: var(--shadow-sm);
