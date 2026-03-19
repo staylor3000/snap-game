@@ -137,7 +137,7 @@ function transition(newState) {
       btnFlip.disabled = false;
       btnSnap.classList.remove('snap-active');
       setStatus(currentTurn === 'player'
-        ? "Your turn — flip a card! [Space]"
+        ? "Your turn — flip a card! <span class='kbd-hint'>[Space]</span>"
         : "CPU's turn…");
 
       if (currentTurn === 'ai') {
@@ -478,7 +478,7 @@ function bumpCounter(el) {
   el.classList.add('pop');
 }
 
-function setStatus(msg) { elStatus.textContent = msg; }
+function setStatus(msg) { elStatus.innerHTML = msg; }
 
 let snapSuccessFrame = 1;
 let snapFailFrame    = 1;
