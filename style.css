@@ -81,7 +81,7 @@ body {
 }
 
 #level-progress-label {
-  font-size: 0.62rem;
+  font-size: 0.72rem;
   font-family: 'Bangers', cursive;
   letter-spacing: 0.1em;
   color: var(--ink);
@@ -109,7 +109,7 @@ body {
 #hud-you  { flex-direction: row-reverse; }
 
 .hud-name {
-  font-size: 0.7rem;
+  font-size: 0.82rem;
   font-family: 'Bangers', cursive;
   letter-spacing: 0.12em;
   color: var(--ink);
@@ -118,7 +118,7 @@ body {
 }
 
 .hud-cards {
-  font-size: 0.75rem;
+  font-size: 0.88rem;
   font-family: 'Bangers', cursive;
   font-weight: 400;
   color: var(--ink);
@@ -159,7 +159,7 @@ body {
 }
 
 #hud-vs {
-  font-size: 1rem;
+  font-size: 1.2rem;
   font-family: 'Bangers', cursive;
   color: var(--ink);
   letter-spacing: 0.18em;
@@ -196,7 +196,7 @@ body {
 .streak-pop { animation: streak-pop 0.2s ease-out forwards; }
 
 #level-badge {
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   font-family: 'Bangers', cursive;
   letter-spacing: 0.12em;
   color: var(--yellow);
@@ -205,7 +205,7 @@ body {
   box-shadow: 2px 2px 0 var(--yellow);
   padding: 1px 8px;
 }
-#level-badge #level-num { font-size: 0.75rem; }
+#level-badge #level-num { font-size: 0.88rem; }
 
 /* ── Snap counters ────────────────────────────────────────────────────────── */
 #snap-counters {
@@ -222,7 +222,7 @@ body {
 }
 
 .snap-counter-label {
-  font-size: 0.7rem;
+  font-size: 0.82rem;
   font-family: 'Bangers', cursive;
   letter-spacing: 0.08em;
   color: #888;
@@ -230,7 +230,7 @@ body {
 }
 
 .snap-counter-value {
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   font-family: 'Bangers', cursive;
   color: var(--white);
   border: 2px solid var(--ink);
@@ -294,7 +294,7 @@ body {
 #you-label          { grid-area: you-label; text-align: right; }
 
 .player-label {
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   font-family: 'Bangers', cursive;
   letter-spacing: 0.08em;
   color: #888;
@@ -302,7 +302,7 @@ body {
 }
 .player-label strong {
   display: block;
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   color: var(--ink);
 }
 
@@ -368,13 +368,13 @@ body {
   display: grid;
   grid-template-columns: 2.8rem 1fr 1fr;
   gap: 2px;
-  font-size: 0.62rem;
+  font-size: 0.72rem;
   font-family: 'Russo One', sans-serif;
   line-height: 1.65;
 }
 
 .stat-col-header {
-  font-size: 0.58rem;
+  font-size: 0.68rem;
   font-weight: 700;
   letter-spacing: 0.06em;
   color: var(--ink);
@@ -457,7 +457,7 @@ body {
 }
 
 #pile-count {
-  font-size: 0.8rem;
+  font-size: 0.95rem;
   font-family: 'Bangers', cursive;
   letter-spacing: 0.06em;
   color: #888;
@@ -542,11 +542,11 @@ body {
 
 .card.red   { color: var(--red); }
 .card.black { color: var(--ink); }
-.joker-center { font-size: 2.2rem; }
+.joker-center { font-size: 2.6rem; }
 
 .corner {
   position: absolute;
-  font-size: 12px;
+  font-size: 14px;
   line-height: 1.2;
   font-family: 'Bangers', cursive;
   letter-spacing: 0.05em;
@@ -562,7 +562,7 @@ body {
   position: absolute;
   top: 50%; left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 32px;
+  font-size: 38px;
   line-height: 1;
 }
 
@@ -596,7 +596,7 @@ body {
 }
 
 #status-msg {
-  font-size: 0.9rem;
+  font-size: 1rem;
   font-family: 'Russo One', sans-serif;
   font-weight: 700;
   color: var(--ink);
@@ -606,7 +606,7 @@ body {
 }
 
 #snap-hint {
-  font-size: 0.9rem;
+  font-size: 1rem;
   font-family: 'Russo One', sans-serif;
   font-weight: 700;
   color: var(--red);
@@ -659,7 +659,7 @@ body {
   border: 3px solid var(--ink);
   box-shadow: var(--shadow-sm);
   font-family: 'Bangers', cursive;
-  font-size: 1rem;
+  font-size: 1.1rem;
   letter-spacing: 0.08em;
   cursor: pointer;
   transition: transform 0.1s, box-shadow 0.1s, opacity 0.15s;
@@ -713,7 +713,7 @@ body {
 
 .snap-text {
   font-family: 'Bangers', cursive;
-  font-size: 1rem;
+  font-size: 1.1rem;
   color: var(--white);
   letter-spacing: 0.08em;
   user-select: none;

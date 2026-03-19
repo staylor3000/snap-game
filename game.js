@@ -375,7 +375,7 @@ function updatePileVisual() {
   const layers = Math.min(count, 12);
   const shadows = [];
   for (let i = 1; i <= layers; i++) {
-    shadows.push(`${i * 2}px ${i * 2}px 0 rgba(106,27,154,0.65)`);
+    shadows.push(`${i * 2}px ${i * 2}px 0 rgba(0,0,0,0.7)`);
   }
   elPileCardPrev.style.boxShadow = shadows.join(', ');
 
@@ -394,7 +394,7 @@ function updatePileVisual() {
   const g = Math.round(31  - t * 31);   // 31  → 0
   const b = Math.round(162 - t * 22);   // 162 → 140
   elPileCount.style.color    = `rgb(${r},${g},${b})`;
-  elPileCount.style.fontSize = `${(0.8 + t * 0.3).toFixed(2)}rem`;
+  elPileCount.style.fontSize = `${(0.95 + t * 0.3).toFixed(2)}rem`;
   elPileCount.style.fontWeight = t > 0.5 ? 'bold' : '';
 }
 
