@@ -481,16 +481,20 @@ function bumpCounter(el) {
 
 function setStatus(msg) { elStatus.textContent = msg; }
 
+let snapSuccessFrame = 1;
 function showSnapFlash(type, targetEl) {
   const rect = targetEl.getBoundingClientRect();
   elSnapFlash.style.left = `${rect.left + rect.width / 2}px`;
   elSnapFlash.style.top  = `${rect.top  + rect.height / 2}px`;
   elSnapFlash.className = '';
-  const snapEmojis = ['✨', '⚡️', '🔥'];
-  const snapEmoji  = snapEmojis[Math.floor(Math.random() * snapEmojis.length)];
-  elSnapFlash.innerHTML = type === 'snap'
-    ? `<span class="flash-emoji">${snapEmoji}</span><span class="flash-label">SNAP!</span>`
-    : '<span class="flash-emoji">❌</span><span class="flash-label">DENIED</span>';
+
+  if (type === 'snap') {
+    elSnapFlash.innerHTML = `<img class="flash-image" src="assets/snap_success_${snapSuccessFrame}.png" alt="" />`;
+    snapSuccessFrame = snapSuccessFrame === 1 ? 2 : 1;
+  } else {
+    elSnapFlash.innerHTML = '<span class="flash-emoji">❌</span><span class="flash-label">DENIED</span>';
+  }
+
   void elSnapFlash.offsetWidth;
   elSnapFlash.classList.add(type === 'snap' ? 'flash-snap' : 'flash-deny');
 }
