@@ -474,6 +474,13 @@ body {
   white-space: nowrap;
 }
 
+.flash-image {
+  width: 180px;
+  height: 180px;
+  object-fit: contain;
+  display: block;
+}
+
 .flash-emoji {
   font-size: 6rem;
   line-height: 1;
@@ -656,7 +663,7 @@ body {
   width: 180px;
 }
 
-/* ── SNAP! starburst ──────────────────────────────────────────────────────── */
+/* ── SNAP! button ─────────────────────────────────────────────────────────── */
 #btn-snap[hidden] { display: none; }
 
 .snap-wrapper {
@@ -664,57 +671,31 @@ body {
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  padding: 12px 32px;
+  width: 180px;
+  background: #FF3D78;
+  border: 3px solid var(--ink);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.1s, box-shadow 0.1s;
 }
 
-.starburst {
-  width: 130px;
-  height: 130px;
-  background: var(--yellow);
-  clip-path: polygon(
-    50% 0%,  56% 22%, 65% 8%,  66% 30%, 79% 20%,
-    75% 40%, 92% 36%, 82% 53%, 100% 56%, 83% 66%,
-    96% 76%, 78% 76%, 82% 96%, 67% 86%, 62% 100%,
-    50% 84%, 38% 100%, 33% 86%, 18% 96%, 22% 76%,
-    4% 76%,  17% 66%, 0% 56%,  18% 53%, 8% 36%,
-    25% 40%, 21% 20%, 34% 30%, 35% 8%,  44% 22%
-  );
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  filter: drop-shadow(4px 4px 0 var(--ink));
-  transition: filter 0.1s, transform 0.1s;
+.snap-wrapper:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 5px 5px 0 var(--ink);
 }
 
-.snap-wrapper:hover .starburst {
-  transform: scale(1.06) rotate(3deg);
-  filter: drop-shadow(6px 6px 0 var(--ink));
-}
-
-.snap-wrapper:active .starburst {
-  transform: scale(0.95) rotate(-2deg);
-  filter: drop-shadow(2px 2px 0 var(--ink));
+.snap-wrapper:active {
+  transform: translate(3px, 3px);
+  box-shadow: none;
 }
 
 .snap-text {
   font-family: 'Bangers', cursive;
-  font-size: 2rem;
-  color: var(--ink);
-  letter-spacing: 0.1em;
+  font-size: 1rem;
+  color: var(--white);
+  letter-spacing: 0.08em;
   user-select: none;
-  animation: wiggle 0.45s ease-in-out infinite alternate;
 }
-
-@keyframes wiggle {
-  from { transform: rotate(-4deg) scale(0.96); }
-  to   { transform: rotate(4deg)  scale(1.04); }
-}
-
-@keyframes snap-pulse {
-  0%   { transform: scale(0.4); opacity: 0; }
-  70%  { transform: scale(1.12); }
-  100% { transform: scale(1);   opacity: 1; }
-}
-#btn-snap.snap-active .starburst { animation: snap-pulse 0.22s ease-out forwards; }
 
 /* ── Game-over modal ──────────────────────────────────────────────────────── */
 #overlay {
