@@ -264,9 +264,9 @@ body {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   grid-template-areas:
-    "cpu-label  cpu-deck    snap-stats"
-    ".          pile-area   snap-stats"
-    ".          player-deck you-label";
+    "cpu-label  cpu-deck    ."
+    ".          pile-area   ."
+    "snap-stats player-deck you-label";
   align-items: center;
   gap: 12px 8px;
   position: relative;
@@ -290,7 +290,7 @@ body {
 #cpu-label          { grid-area: cpu-label; }
 #ai-deck-visual     { grid-area: cpu-deck; }
 #pile-area          { grid-area: pile-area; }
-#snap-stats         { grid-area: snap-stats; align-self: center; justify-self: stretch; }
+#snap-stats         { grid-area: snap-stats; align-self: center; }
 #player-deck-visual { grid-area: player-deck; }
 #you-label          { grid-area: you-label; text-align: right; }
 
@@ -357,6 +357,17 @@ body {
 }
 
 /* ── Snap stats bubble (in table) ─────────────────────────────────────────── */
+#snap-stats-title {
+  font-family: 'Bangers', cursive;
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  background: var(--ink);
+  color: var(--yellow);
+  text-align: center;
+  padding: 3px 6px;
+}
+
 #snap-stats {
   background: var(--white);
   border: 2px solid var(--ink);
