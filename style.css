@@ -35,7 +35,7 @@ body {
   align-items: center;
   gap: 0;
   width: min(480px, 100vw);
-  padding: 16px;
+  padding: 8px 16px 10px;
   background: var(--white);
   border: 3px solid var(--ink);
   box-shadow: var(--shadow-lg);
@@ -61,12 +61,12 @@ body {
 /* ── Level progress bar ───────────────────────────────────────────────────── */
 #level-progress {
   width: 100%;
-  padding-bottom: 6px;
+  padding-bottom: 2px;
 }
 
 #level-progress-track {
   width: 100%;
-  height: 12px;
+  height: 20px;
   background: var(--white);
   border: 2px solid var(--ink);
   box-shadow: 2px 2px 0 var(--ink);
@@ -95,7 +95,7 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 0 6px;
+  padding: 4px 0 4px;
 }
 
 .hud-player {
@@ -309,14 +309,14 @@ body {
 
 .turn-tag {
   display: block;
-  font-size: 0.55rem;
+  font-size: 0.75rem;
   font-family: 'Bangers', cursive;
   letter-spacing: 0.1em;
   color: var(--ink);
   background: var(--yellow);
   border: 2px solid var(--ink);
   box-shadow: 2px 2px 0 var(--ink);
-  padding: 1px 5px;
+  padding: 3px 8px;
   margin-top: 3px;
   text-transform: uppercase;
   min-height: 1em;
@@ -361,27 +361,27 @@ body {
   background: var(--white);
   border: 2px solid var(--ink);
   box-shadow: var(--shadow-sm);
-  padding: 6px 8px;
+  padding: 0;
+  overflow: hidden;
 }
 
 .stat-header-row,
 .stat-row {
   display: grid;
   grid-template-columns: 2.8rem 1fr 1fr;
-  gap: 2px;
+  gap: 0;
   font-size: 0.72rem;
   font-family: 'Russo One', sans-serif;
   line-height: 1.65;
 }
 
 .stat-col-header {
-  font-size: 0.68rem;
+  font-size: 0.6rem;
   font-weight: 700;
-  letter-spacing: 0.06em;
   color: var(--ink);
   text-align: center;
   text-transform: uppercase;
-  padding-bottom: 2px;
+  padding: 4px 2px 2px;
   border-bottom: 2px solid var(--ink);
 }
 
@@ -392,17 +392,26 @@ body {
 }
 
 .stat-label {
+  font-size: 0.6rem;
   font-weight: 700;
-  letter-spacing: 0.04em;
   color: #888;
   text-transform: uppercase;
+  padding: 1px 4px 1px 8px;
 }
 
 .stat-val {
   font-weight: 700;
   color: var(--ink);
   text-align: center;
+  padding: 1px 2px;
 }
+
+/* Column shading */
+.stat-header-row span:nth-child(2),
+.stat-row span:nth-child(2) { background: rgba(0,0,0,0.04); }
+
+.stat-header-row span:nth-child(3),
+.stat-row span:nth-child(3) { background: rgba(0,0,0,0.08); }
 
 /* ── Central pile ─────────────────────────────────────────────────────────── */
 #pile-area {
@@ -598,7 +607,7 @@ body {
 }
 
 #status-msg {
-  font-size: 1rem;
+  font-size: 0.85rem;
   font-family: 'Russo One', sans-serif;
   font-weight: 700;
   color: var(--ink);
@@ -624,7 +633,7 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 4px;
-  margin-top: 28px;
+  margin-top: 12px;
   font-size: 0.62rem;
   color: #888;
 }
