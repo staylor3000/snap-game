@@ -106,7 +106,7 @@ body {
 }
 
 #hud-cpu  { flex-direction: row; }
-#hud-you  { flex-direction: row-reverse; }
+#hud-you  { flex-direction: row; }
 
 .hud-name {
   font-size: 0.82rem;
