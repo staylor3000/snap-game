@@ -5,7 +5,7 @@ class Card {
   constructor(suit, value) {
     this.suit = suit;
     this.value = value;
-    this.symbol = value === 'Joker' ? '🃏' : { Hearts: '♥', Diamonds: '♦', Clubs: '♣', Spades: '♠' }[suit];
+    this.symbol = value === 'Joker' ? '🃏' : { Hearts: '♥\uFE0E', Diamonds: '♦\uFE0E', Clubs: '♣\uFE0E', Spades: '♠\uFE0E' }[suit];
     this.color  = (suit === 'Hearts' || suit === 'Diamonds') ? 'red' : 'black';
   }
 }
