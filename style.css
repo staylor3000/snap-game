@@ -404,6 +404,13 @@ body {
   text-align: center;
 }
 
+/* Column shading */
+.stat-header-row span:nth-child(2),
+.stat-row span:nth-child(2) { background: rgba(0,0,0,0.04); }
+
+.stat-header-row span:nth-child(3),
+.stat-row span:nth-child(3) { background: rgba(0,0,0,0.08); }
+
 /* ── Central pile ─────────────────────────────────────────────────────────── */
 #pile-area {
   display: flex;
