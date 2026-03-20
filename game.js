@@ -315,19 +315,11 @@ function renderCard(el, card, animate = true) {
     return;
   }
   el.className = `card face-up ${card.color}`;
-  if (card.value === 'Joker') {
-    el.innerHTML = `
-      <span class="corner top-left">🃏</span>
-      <span class="center-suit joker-center">🃏</span>
-      <span class="corner bottom-right">🃏</span>
-    `;
-  } else {
-    el.innerHTML = `
+  el.innerHTML = `
       <span class="corner top-left">${card.value}<br>${card.symbol}</span>
       <span class="center-suit">${card.symbol}</span>
       <span class="corner bottom-right">${card.value}<br>${card.symbol}</span>
     `;
-  }
   if (animate) {
     el.classList.remove('flip-in');
     void el.offsetWidth;

@@ -5,7 +5,7 @@ class Card {
   constructor(suit, value) {
     this.suit = suit;
     this.value = value;
-    this.symbol = value === 'Joker' ? '🃏' : { Hearts: '♥', Diamonds: '♦', Clubs: '♣', Spades: '♠' }[suit];
+    this.symbol = { Hearts: '♥\uFE0E', Diamonds: '♦\uFE0E', Clubs: '♣\uFE0E', Spades: '♠\uFE0E' }[suit];
     this.color  = (suit === 'Hearts' || suit === 'Diamonds') ? 'red' : 'black';
   }
 }
@@ -14,10 +14,6 @@ class Deck {
   constructor(numValues = 13) {
     const values = VALUES.slice(0, numValues);
     this.cards = SUITS.flatMap(suit => values.map(value => new Card(suit, value)));
-    // One joker per suit, introduced from level 3 onwards (numValues >= 6)
-    if (numValues >= 6) {
-      SUITS.forEach(suit => this.cards.push(new Card(suit, 'Joker')));
-    }
   }
 
   shuffle() {
