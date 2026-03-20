@@ -106,7 +106,7 @@ body {
 }
 
 #hud-cpu  { flex-direction: row; }
-#hud-you  { flex-direction: row-reverse; }
+#hud-you  { flex-direction: row; }
 
 .hud-name {
   font-size: 0.82rem;
@@ -357,6 +357,17 @@ body {
 }
 
 /* ── Snap stats bubble (in table) ─────────────────────────────────────────── */
+#snap-stats-title {
+  font-family: 'Bangers', cursive;
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  background: var(--ink);
+  color: var(--yellow);
+  text-align: center;
+  padding: 3px 6px;
+}
+
 #snap-stats {
   background: var(--white);
   border: 2px solid var(--ink);
