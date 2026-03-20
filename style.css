@@ -394,6 +394,8 @@ body {
   text-transform: uppercase;
   padding: 4px 2px 2px;
   border-bottom: 2px solid var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .stat-divider {
