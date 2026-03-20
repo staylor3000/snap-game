@@ -431,8 +431,9 @@ function renderCounts() {
   elAiCount.textContent     = ai.cardCount;
   updateStack(elPlayerDeck, player.cardCount);
   updateStack(elAiDeck,     ai.cardCount);
-  setBar(elPlayerBar, player.cardCount / 52);
-  setBar(elCpuBar,    ai.cardCount     / 52);
+  const totalCards = player.cardCount + ai.cardCount;
+  setBar(elPlayerBar, totalCards > 0 ? player.cardCount / totalCards : 0);
+  setBar(elCpuBar,    totalCards > 0 ? ai.cardCount     / totalCards : 0);
 }
 
 function updateStack(containerEl, count) {
