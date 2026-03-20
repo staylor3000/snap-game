@@ -361,27 +361,27 @@ body {
   background: var(--white);
   border: 2px solid var(--ink);
   box-shadow: var(--shadow-sm);
-  padding: 6px 8px;
+  padding: 0;
+  overflow: hidden;
 }
 
 .stat-header-row,
 .stat-row {
   display: grid;
   grid-template-columns: 2.8rem 1fr 1fr;
-  gap: 2px;
+  gap: 0;
   font-size: 0.72rem;
   font-family: 'Russo One', sans-serif;
   line-height: 1.65;
 }
 
 .stat-col-header {
-  font-size: 0.68rem;
+  font-size: 0.6rem;
   font-weight: 700;
-  letter-spacing: 0.06em;
   color: var(--ink);
   text-align: center;
   text-transform: uppercase;
-  padding-bottom: 2px;
+  padding: 4px 2px 2px;
   border-bottom: 2px solid var(--ink);
 }
 
@@ -396,12 +396,14 @@ body {
   letter-spacing: 0.04em;
   color: #888;
   text-transform: uppercase;
+  padding: 1px 4px 1px 8px;
 }
 
 .stat-val {
   font-weight: 700;
   color: var(--ink);
   text-align: center;
+  padding: 1px 2px;
 }
 
 /* Column shading */
