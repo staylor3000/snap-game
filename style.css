@@ -35,7 +35,7 @@ body {
   align-items: center;
   gap: 0;
   width: min(480px, 100vw);
-  padding: 16px;
+  padding: 8px 16px 10px;
   background: var(--white);
   border: 3px solid var(--ink);
   box-shadow: var(--shadow-lg);
@@ -61,7 +61,7 @@ body {
 /* ── Level progress bar ───────────────────────────────────────────────────── */
 #level-progress {
   width: 100%;
-  padding-bottom: 6px;
+  padding-bottom: 2px;
 }
 
 #level-progress-track {
@@ -95,7 +95,7 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 0 6px;
+  padding: 4px 0 4px;
 }
 
 .hud-player {
@@ -607,7 +607,7 @@ body {
 }
 
 #status-msg {
-  font-size: 1rem;
+  font-size: 0.85rem;
   font-family: 'Russo One', sans-serif;
   font-weight: 700;
   color: var(--ink);
@@ -633,7 +633,7 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 4px;
-  margin-top: 28px;
+  margin-top: 12px;
   font-size: 0.62rem;
   color: #888;
 }
