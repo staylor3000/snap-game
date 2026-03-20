@@ -345,7 +345,9 @@ body {
 .stack-card {
   width: 62px;
   height: 88px;
-  background: var(--blue) url('assets/playsnap_logo.png') center/50% no-repeat;
+  background-color: var(--blue);
+  background-image: radial-gradient(circle, rgba(0,0,0,0.25) 1.5px, transparent 1.5px);
+  background-size: 8px 8px;
   border: 2px solid var(--ink);
   position: relative;
   transition: box-shadow 0.35s ease, opacity 0.3s ease;
