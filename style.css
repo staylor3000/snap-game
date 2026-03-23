@@ -1006,3 +1006,7 @@ body {
 #how-to-play h1 { font-size: 0.75rem; margin-bottom: 0.3rem; font-weight: 700; }
 #how-to-play h2 { font-size: 0.72rem; margin-top: 0.6rem; font-weight: 700; }
 #how-to-play p  { font-size: 0.72rem; line-height: 1.6; margin-top: 0.2rem; }
+#how-to-play dl { margin-top: 0.2rem; }
+#how-to-play dt { font-size: 0.72rem; font-weight: 700; margin-top: 0.4rem; }
+#how-to-play dd { font-size: 0.72rem; line-height: 1.6; margin: 0; }
+#how-to-play a  { color: inherit; }
